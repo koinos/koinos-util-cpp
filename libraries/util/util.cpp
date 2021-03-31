@@ -1,5 +1,6 @@
 #include <koinos/util.hpp>
 
+#include <algorithm>
 #include <cstdlib>
 
 namespace koinos {
