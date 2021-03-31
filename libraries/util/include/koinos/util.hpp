@@ -14,6 +14,6 @@ template< class... Ts > overloaded( Ts... ) -> overloaded< Ts... >;
 
 std::filesystem::path get_default_base_directory();
 
-std::string random_alphanumeric( std::size_t len, std::mt19937 generator = std::mt19937( std::random_device{}() ) );
+std::string random_alphanumeric( std::size_t len );
 
 } // koinos

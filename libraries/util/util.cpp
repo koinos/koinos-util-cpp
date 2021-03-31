@@ -14,8 +14,9 @@ std::filesystem::path get_default_base_directory()
    return std::filesystem::path{ parent } / ".koinos";
 }
 
-std::string random_alphanumeric( std::size_t len, std::mt19937 generator )
+std::string random_alphanumeric( std::size_t len )
 {
+   thread_local std::mt19937 generator( std::random_device{}() );
    auto random_char = [&]() -> char
    {
       constexpr char charset[] =
