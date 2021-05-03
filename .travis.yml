@@ -31,7 +31,7 @@ jobs:
         - MATRIX_EVAL="CC=clang-11 && CXX=clang++-11"
 
 before_install:
-  eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL}"
 
 install:
   - ci/install.sh
