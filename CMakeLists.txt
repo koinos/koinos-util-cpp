@@ -84,6 +84,9 @@ if(COVERAGE)
      EXCLUDE "libraries/vendor/*" "build/generated/*")
 endif()
 
+hunter_add_package(Boost COMPONENTS system log thread date_time filesystem chrono locale test program_options)
+find_package(Boost CONFIG REQUIRED COMPONENTS system log log_setup thread date_time filesystem chrono locale program_options)
+
 add_subdirectory(libraries)
 add_subdirectory(tests)
 
