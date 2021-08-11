@@ -85,6 +85,7 @@ if(COVERAGE)
 endif()
 
 add_subdirectory(libraries)
+add_subdirectory(tests)
 
 # Install a pkg-config file, so other tools can find this.
 configure_file(

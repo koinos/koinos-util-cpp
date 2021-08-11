@@ -79,7 +79,7 @@ std::string encode_base58( const std::vector< std::byte >& v );
 template< size_t N >
 std::string encode_base58( const std::array< char, N >& v )
 {
-   const unsigned char* begin = static_cast< const unsigned char* >( v.data() );
+   const unsigned char* begin = reinterpret_cast< const unsigned char* >( v.data() );
    return encode_base58( begin, begin + N );
 }
 
@@ -93,7 +93,7 @@ std::string encode_base58( const std::array< unsigned char, N >& v )
 template< size_t N >
 std::string encode_base58( const std::array< std::byte, N >& v )
 {
-   const unsigned char* begin = static_cast< const unsigned char* >( v.data() );
+   const unsigned char* begin = reinterpret_cast< const unsigned char* >( v.data() );
    return encode_base58( begin, begin + N );
 }
 

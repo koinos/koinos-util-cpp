@@ -119,23 +119,22 @@ std::string encode_base58( const unsigned char* pbegin, const unsigned char* pen
 
 void decode_base58( const std::string& src, std::vector< char >& dest )
 {
-   decode_base58( src.data(), dest );
+   decode_base58( src.data(), src.size(), dest );
 }
 
 void decode_base58( const std::string& src, std::vector< unsigned char >& dest )
 {
-   decode_base58( src.data(), dest );
+   std::vector< char > v;
+   decode_base58( src.data(), src.size(), v );
+   dest.assign( v.begin(), v.end() );
 }
 
 void decode_base58( const std::string& src, std::vector< std::byte >& dest )
 {
-   decode_base58( src.data(), dest );
-}
-
-void encode_base58( std::string& s, const std::vector<char>& v )
-{
-   unsigned char* begin = (unsigned char*) v.data();
-   s = encode_base58( begin, begin + v.size() );
+   std::vector< char > v;
+   decode_base58( src.data(), src.size(), v );
+   auto* begin = reinterpret_cast< std::byte* >( v.data() );
+   dest.assign( begin, begin + v.size() );
 }
 
 void encode_base58( std::string& s, const std::string& v )
