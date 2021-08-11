@@ -1,6 +1,6 @@
 file(GLOB HEADERS "include/koinos/*.hpp")
 
-add_library(koinos_util ${HEADERS} util.cpp)
+add_library(koinos_util ${HEADERS} util.cpp base58.cpp)
 
 target_include_directories(koinos_util PUBLIC
    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
