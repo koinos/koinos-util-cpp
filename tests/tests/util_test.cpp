@@ -3,13 +3,45 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <sstream>
 #include <vector>
 
 #include <koinos/tests/util_fixture.hpp>
 #include <koinos/base58.hpp>
-
+#include <koinos/varint.hpp>
 
 BOOST_FIXTURE_TEST_SUITE( util_tests, util_fixture )
+
+BOOST_AUTO_TEST_CASE( varint_test )
+{
+   BOOST_TEST_MESSAGE( "signed_varint" );
+
+   int64_t a  = -10;
+
+   std::stringstream stream_a;
+
+   koinos::to_binary( stream_a, koinos::signed_varint( a ) );
+
+   koinos::signed_varint v_a;
+
+   koinos::from_binary( stream_a, v_a );
+
+   BOOST_CHECK_EQUAL( v_a.value, a );
+
+   BOOST_TEST_MESSAGE( "unsigned_varint" );
+
+   uint64_t b = 10;
+
+   std::stringstream stream_b;
+
+   koinos::to_binary( stream_b, koinos::unsigned_varint( b ) );
+
+   koinos::unsigned_varint v_b;
+
+   koinos::from_binary( stream_b, v_b );
+
+   BOOST_CHECK_EQUAL( v_b.value, b );
+}
 
 BOOST_AUTO_TEST_CASE( base58_test )
 {
