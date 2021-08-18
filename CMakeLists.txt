@@ -36,7 +36,7 @@ HunterGate(
    LOCAL
 )
 
-project(koinos_util VERSION 0.1.0 LANGUAGES CXX)
+project(koinos_util VERSION 0.1.0 LANGUAGES CXX C)
 
 #
 # CONFIGURATION
