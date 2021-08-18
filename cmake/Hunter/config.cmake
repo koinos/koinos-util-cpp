@@ -1,5 +1,5 @@
 hunter_config(Boost
-   VERSION "1.72.0-p1"
+   VERSION ${HUNTER_Boost_VERSION}
    CMAKE_ARGS
       USE_CONFIG_FROM_BOOST=ON
       Boost_USE_STATIC_LIBS=ON
