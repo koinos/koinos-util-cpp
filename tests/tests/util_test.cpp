@@ -8,6 +8,7 @@
 
 #include <koinos/tests/util_fixture.hpp>
 #include <koinos/base58.hpp>
+#include <koinos/type_traits.hpp>
 #include <koinos/varint.hpp>
 
 BOOST_FIXTURE_TEST_SUITE( util_tests, util_fixture )
@@ -157,6 +158,12 @@ BOOST_AUTO_TEST_CASE( base58_test )
       std::array< std::byte, array_size_overflow > bs;
       BOOST_CHECK_THROW( koinos::decode_base58( b58_str, bs ), std::runtime_error );
    }
+}
+
+BOOST_AUTO_TEST_CASE( has_to_binary )
+{
+   BOOST_REQUIRE( !koinos::has_to_binary_v< uint32_t > );
+   BOOST_REQUIRE( koinos::has_to_binary_v< koinos::unsigned_varint > );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

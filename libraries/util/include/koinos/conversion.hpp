@@ -1,18 +1,22 @@
-#include <stringstream>
+#include <sstream>
+
+namespace google::protobuf {
+   class Message;
+}
 
 namespace koinos::converter {
 
 template< class Container, typename T >
-typename std::enable_if_t< std::is_member_function_pointer_v< decltype( &T::SerializeToString ) >, Container >
+typename std::enable_if_t< std::is_base_of_v< google::protobuf::Message, T >, Container >
 as( const T& t )
 {
    std::string s;
-   t.SerialzeToString( &s );
+   t.SerializeToString( &s );
 
    Container b;
    b.resize( s.size() );
 
-   std::transform( str.begin(), str.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( s.begin(), s.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
 
    static_assert( sizeof( *b.begin() ) == sizeof( std::byte ) );
 
@@ -20,7 +24,7 @@ as( const T& t )
 }
 
 template< class Container, typename T >
-typename std::enable_if_t< !std::is_member_function_pointer_v< decltype( &T::SerializeToString ) >, Container >
+typename std::enable_if_t< !std::is_base_of_v< google::protobuf::Message, T >, Container >
 as( const T& t )
 {
    std::stringstream ss;
@@ -30,7 +34,7 @@ as( const T& t )
    Container b;
    b.resize( s.size() );
 
-   std::transform( str.begin(), str.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( s.begin(), s.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
 
    static_assert( sizeof( *b.begin() ) == sizeof( std::byte ) );
 
@@ -38,7 +42,7 @@ as( const T& t )
 }
 
 template< typename T, class Container >
-typename std::enable_if_t< std::is_member_function_pointer_v< decltype( &T::SerializeToString ) >, T >
+typename std::enable_if_t< std::is_base_of_v< google::protobuf::Message, T >, T >
 from( const Container& c )
 {
    T t;
@@ -47,7 +51,7 @@ from( const Container& c )
    static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
 
    for ( const auto& e : c )
-      stream.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
+      ss.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
 
    t.ParseFromIstream( &ss );
 
@@ -55,7 +59,7 @@ from( const Container& c )
 }
 
 template< typename T, class Container >
-typename std::enable_if_t< !std::is_member_function_pointer_v< decltype( &T::SerializeToString ) >, T >
+typename std::enable_if_t< !std::is_base_of_v< google::protobuf::Message, T >, T >
 from( const Container& c )
 {
    T t;
@@ -64,7 +68,7 @@ from( const Container& c )
    static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
 
    for ( const auto& e : c )
-      stream.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
+      ss.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
 
    from_binary( ss, t );
 

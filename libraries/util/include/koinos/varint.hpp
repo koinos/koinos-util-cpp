@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <stdexcept>
 
+#include <koinos/binary_fwd.hpp>
+
 namespace koinos {
 
 struct signed_varint
@@ -19,8 +21,8 @@ struct unsigned_varint
    uint64_t value = 0;
 };
 
-template< typename Stream >
-inline void to_binary( Stream& s, const unsigned_varint& v )
+template<>
+inline void to_binary< unsigned_varint >( std::ostream& s, const unsigned_varint& v )
 {
    char tmp[ ( sizeof( v.value ) * 8 + 6 ) / 7 ];
    uint64_t n = v.value;
@@ -44,8 +46,8 @@ inline void to_binary( Stream& s, const unsigned_varint& v )
    }
 }
 
-template< typename Stream >
-inline void from_binary( Stream& s, unsigned_varint& v )
+template<>
+inline void from_binary< unsigned_varint >( std::istream& s, unsigned_varint& v )
 {
    v.value = 0;
    char data = 0;
@@ -62,16 +64,16 @@ inline void from_binary( Stream& s, unsigned_varint& v )
    } while( data & 0x80 );
 }
 
-template< typename Stream >
-inline void to_binary( Stream& s, const signed_varint& v )
+template<>
+inline void to_binary< signed_varint >( std::ostream& s, const signed_varint& v )
 {
    unsigned_varint val = 0;
    val.value = uint64_t( ( v.value << 1 ) ^ ( v.value >> 63 ) );
    to_binary( s, val );
 }
 
-template< typename Stream >
-inline void from_binary( Stream& s, signed_varint& v )
+template<>
+inline void from_binary< signed_varint >( std::istream& s, signed_varint& v )
 {
    unsigned_varint val;
    from_binary( s, val );
