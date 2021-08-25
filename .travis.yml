@@ -2,23 +2,18 @@ language: c++
 
 cache:
   ccache: true
-  pip: true
 
 addons:
   apt:
-    packages:
-      - python3
-      - python3-pip
-      - python3-setuptools
     update: true
 
 jobs:
   include:
-#    - os: linux
-#      dist: focal
-#      env:
-#        - RUN_TYPE=coverage
-#        - MATRIX_EVAL="CC=clang-11 && CXX=clang++-11"
+    - os: linux
+      dist: focal
+      env:
+        - RUN_TYPE=coverage
+        - MATRIX_EVAL="CC=clang-11 && CXX=clang++-11"
     - os: linux
       dist: focal
       env:

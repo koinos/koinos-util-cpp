@@ -20,14 +20,6 @@ set(
    "Default cache server"
 )
 
-set(
-   HUNTER_PASSWORDS_PATH
-   "${CMAKE_CURRENT_LIST_DIR}/cmake/Hunter/passwords.cmake"
-   CACHE
-   FILEPATH
-   "Hunter passwords"
-)
-
 include("cmake/HunterGate.cmake")
 
 HunterGate(
@@ -81,11 +73,16 @@ if(COVERAGE)
      NAME coverage
      LCOV_ARGS "--quiet" "--no-external"
      EXECUTABLE koinos_log_tests
-     EXCLUDE "libraries/vendor/*" "build/generated/*")
+     EXCLUDE
+        "build/*"
+        "libraries/proto/generated/*")
 endif()
 
 hunter_add_package(Boost COMPONENTS test)
+hunter_add_package(Protobuf)
+
 find_package(Boost CONFIG REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
 
 add_subdirectory(libraries)
 add_subdirectory(tests)
