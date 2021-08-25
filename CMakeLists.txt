@@ -72,7 +72,7 @@ if(COVERAGE)
   setup_target_for_coverage_lcov(
      NAME coverage
      LCOV_ARGS "--quiet" "--no-external"
-     EXECUTABLE koinos_log_tests
+     EXECUTABLE koinos_util_tests
      EXCLUDE
         "build/*"
         "libraries/proto/generated/*")
