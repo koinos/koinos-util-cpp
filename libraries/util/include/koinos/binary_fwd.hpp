@@ -1,7 +1,5 @@
 #pragma once
 
-//#include <iostream>
-
 namespace koinos {
 
 template< typename T = void >
