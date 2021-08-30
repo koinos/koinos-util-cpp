@@ -1,6 +1,13 @@
 file(GLOB HEADERS "include/koinos/*.hpp")
 
-add_library(koinos_util ${HEADERS} util.cpp base58.cpp)
+add_library(koinos_util
+   base58.cpp
+   bigint.cpp
+   util.cpp
+   varint.cpp
+   ${HEADERS})
+
+target_link_libraries(koinos_util PUBLIC Boost::headers)
 
 target_include_directories(koinos_util PUBLIC
    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -31,4 +38,3 @@ install(
    NAMESPACE Koinos::
    DESTINATION ${KOINOS_LIB_CONFIG_INSTALL_DIR}
 )
-
