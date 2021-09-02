@@ -8,14 +8,14 @@ namespace koinos::converter {
 
 namespace detail {
    template< class Container >
-   std::enable_if_t< std::is_member_function_pointer_v< &Container::resize >, void >
+   std::enable_if_t< std::is_member_function_pointer_v< decltype( &Container::resize ) >, void >
    maybe_resize( Container& c, std::size_t s )
    {
       c.resize( s );
    }
 
    template< class Container >
-   std::enable_if_t< !std::is_member_function_pointer_v< &Container::resize >, void >
+   std::enable_if_t< !std::is_member_function_pointer_v< decltype( &Container::resize ) >, void >
    maybe_resize( Container& c, std::size_t s ) {}
 }
 
@@ -47,7 +47,7 @@ as( const T& t )
    Container b;
    detail::maybe_resize( b, s.size() );
 
-   std::transform( std::begin( s ) ), std::end( s ), std::begin( b ), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( std::begin( s ), std::end( s ), std::begin( b ), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
 
    static_assert( sizeof( *std::begin( b ) ) == sizeof( std::byte ) );
 
