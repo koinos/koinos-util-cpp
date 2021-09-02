@@ -1,3 +1,5 @@
+#pragma once
+
 #include <sstream>
 
 namespace google::protobuf {
@@ -28,7 +30,7 @@ as( const T& t )
    Container b;
    detail::maybe_resize( b, s.size() );
 
-   std::transform( s.begin(), s.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( std::begin( s ), std::end( s ), std::begin( b ), []( char c ) { return reinterpret_cast< decltype( *std::begin( b ) ) >( c ); } );
 
    static_assert( sizeof( *b.begin() ) == sizeof( std::byte ) );
 
@@ -46,7 +48,7 @@ as( const T& t )
    Container b;
    detail::maybe_resize( b, s.size() );
 
-   std::transform( std::begin( s ), std::end( s ), std::begin( b ), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( std::begin( s ), std::end( s ), std::begin( b ) + ( s.size() - b.size() ), []( char c ) { return reinterpret_cast< decltype( *std::begin( b ) ) >( c ); } );
 
    static_assert( sizeof( *std::begin( b ) ) == sizeof( std::byte ) );
 
