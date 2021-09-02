@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <stdexcept>
 
-#include <koinos/binary_fwd.hpp>
+#include <koinos/binary.hpp>
 
 namespace koinos {
 

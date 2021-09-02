@@ -6,6 +6,19 @@ namespace google::protobuf {
 
 namespace koinos::converter {
 
+namespace detail {
+   template< class Container >
+   std::enable_if_t< std::is_member_function_pointer_v< &Container::resize >, void >
+   maybe_resize( Container& c, std::size_t s )
+   {
+      c.resize( s );
+   }
+
+   template< class Container >
+   std::enable_if_t< !std::is_member_function_pointer_v< &Container::resize >, void >
+   maybe_resize( Container& c, std::size_t s ) {}
+}
+
 template< class Container, typename T >
 typename std::enable_if_t< std::is_base_of_v< google::protobuf::Message, T >, Container >
 as( const T& t )
@@ -14,7 +27,7 @@ as( const T& t )
    t.SerializeToString( &s );
 
    Container b;
-   b.resize( s.size() );
+   detail::maybe_resize( b, s.size() );
 
    std::transform( s.begin(), s.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
 
@@ -32,11 +45,11 @@ as( const T& t )
    auto s = ss.str();
 
    Container b;
-   b.resize( s.size() );
+   detail::maybe_resize( b, s.size() );
 
-   std::transform( s.begin(), s.end(), b.begin(), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
+   std::transform( std::begin( s ) ), std::end( s ), std::begin( b ), []( char c ) { return reinterpret_cast< decltype( *b.begin() ) >( c ); } );
 
-   static_assert( sizeof( *b.begin() ) == sizeof( std::byte ) );
+   static_assert( sizeof( *std::begin( b ) ) == sizeof( std::byte ) );
 
    return b;
 }
@@ -48,7 +61,7 @@ from( const Container& c )
    T t;
    std::stringstream ss;
 
-   static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
+   static_assert( sizeof( *std::begin( c ) ) == sizeof( std::byte ) );
 
    for ( const auto& e : c )
       ss.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
@@ -65,7 +78,7 @@ from( const Container& c )
    T t;
    std::stringstream ss;
 
-   static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
+   static_assert( sizeof( *std::begin( c ) ) == sizeof( std::byte ) );
 
    for ( const auto& e : c )
       ss.write( reinterpret_cast< const char * >( &e ), sizeof( std::byte ) );
