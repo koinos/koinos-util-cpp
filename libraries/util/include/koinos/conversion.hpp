@@ -7,16 +7,15 @@ namespace google::protobuf {
 namespace koinos::converter {
 
 namespace detail {
+
+   template< typename T, std::size_t N >
+   void maybe_resize( std::array< T, N >&, std::size_t ) {}
+
    template< class Container >
-   std::enable_if_t< std::is_member_function_pointer_v< decltype( &Container::resize ) >, void >
-   maybe_resize( Container& c, std::size_t s )
+   void maybe_resize( Container& c, std::size_t s )
    {
       c.resize( s );
    }
-
-   template< class Container >
-   std::enable_if_t< !std::is_member_function_pointer_v< decltype( &Container::resize ) >, void >
-   maybe_resize( Container& c, std::size_t s ) {}
 }
 
 template< class Container, typename T >
