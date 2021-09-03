@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include <boost/mpl/greater.hpp>
+
 namespace google::protobuf {
    class Message;
 }
@@ -106,8 +108,19 @@ to_n( std::stringstream& ss )
 
 } // detail
 
+template< class Container, typename T >
+Container as( const T& t )
+{
+   Container c;
+   static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
+   detail::as_impl( c, t, 0 );
+
+   return c;
+}
+
 template< class Container, typename... Ts >
-Container as( Ts... ts )
+std::enable_if_t< detail::greater_than< sizeof...( Ts ), 1 >::value, Container >
+as( Ts... ts )
 {
    Container c;
    static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
