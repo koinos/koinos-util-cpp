@@ -30,7 +30,7 @@ as_impl( Container& c, const T& t, std::size_t start )
    std::string s;
    t.SerializeToString( &s );
 
-   detail::maybe_resize( c, std::size( c ) + std::size( s ) );
+   maybe_resize( c, std::size( c ) + std::size( s ) );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
@@ -47,9 +47,9 @@ template< class Container, typename T >
 typename std::enable_if_t< is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, std::size_t >
 as_impl( Container& c, const T& t, std::size_t start )
 {
-   detail::maybe_resize( c, std::size( c ) + std::size( t ) );
+   maybe_resize( c, std::size( c ) + std::size( t ) );
 
-   std::transform( std::begin( t ), std::end( t ), std::begin( c )+ start, []( auto ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
+   std::transform( std::begin( t ), std::end( t ), std::begin( c ) + start, []( auto ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
    return start + std::size( t );
 }
@@ -62,7 +62,7 @@ as_impl( Container& c, const T& t, std::size_t start )
    to_binary( ss, t );
    auto s = ss.str();
 
-   detail::maybe_resize( c, std::size( c ) + std::size( s ) );
+   maybe_resize( c, std::size( c ) + std::size( s ) );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
@@ -77,7 +77,19 @@ to_impl( std::stringstream& ss, T& t )
 }
 
 template< typename T >
-typename std::enable_if_t< !std::is_base_of_v< google::protobuf::Message, T >, void >
+typename std::enable_if_t< is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, void >
+to_impl( std::stringstream& ss, T& t )
+{
+   auto pos = ss.tellg();
+   auto s = ss.str();
+
+   maybe_resize( t, std::size( s ) - pos );
+
+   std::transform( std::begin( s ) + pos, std::end( s ), std::begin( t ), []( auto ch ) { return reinterpret_cast< decltype( *std::begin( t ) ) >( ch ); } );
+}
+
+template< typename T >
+typename std::enable_if_t< !is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, void >
 to_impl( std::stringstream& ss, T& t )
 {
    from_binary( ss, t );
@@ -91,7 +103,7 @@ struct greater_than
 };
 
 template< class Container, typename T >
-void as_n( Container& c, std::size_t start, const T& t )
+void as_n( Container& c, std::size_t start, T&& t )
 {
    as_impl( c, t, start );
 }
@@ -103,7 +115,7 @@ as_n( Container& c, std::size_t start, const T& t, Ts... ts )
    static_assert( !std::is_base_of_v< google::protobuf::Message, T > );
 
    start += as_impl( c, t, start );
-   as_n( c, start, ts... );
+   as_n( c, start, std::forward< Ts >( ts )... );
 }
 
 template< typename T >
@@ -145,13 +157,13 @@ as( Ts... ts )
 {
    Container c;
    static_assert( sizeof( *c.begin() ) == sizeof( std::byte ) );
-   detail::as_n( c, 0, ts... );
+   detail::as_n( c, 0, std::forward< Ts >( ts )... );
 
    return c;
 }
 
 template< typename T, class Container >
-T to( Container& c )
+T to( const Container& c )
 {
    static_assert( sizeof( *std::begin( c ) ) == sizeof( std::byte ) );
    std::stringstream ss;

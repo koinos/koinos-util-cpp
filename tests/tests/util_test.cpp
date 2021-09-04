@@ -188,6 +188,23 @@ BOOST_AUTO_TEST_CASE( conversion_test )
 
    BOOST_REQUIRE( c == uint64_t( x ) << 32 );
    BOOST_REQUIRE( d == uint32_t( z ) );
+
+   auto v = koinos::converter::as< std::vector< std::byte > >( s );
+
+   auto [e, u] = koinos::converter::to< uint32_t, std::string >( v );
+
+   BOOST_REQUIRE( e == x );
+   BOOST_REQUIRE( t == u );
+
+   auto [f, g ] = koinos::converter::to< uint32_t, uint16_t >( std::string( "foobar" ) );
+
+   BOOST_REQUIRE( f == 0x666f6f62 );
+   BOOST_REQUIRE( g == 0x6172 );
+
+   auto w = koinos::converter::as< std::vector< std::byte > >( std::string( "foobar" ) );
+   s = koinos::converter::as< std::string >( w );
+
+   BOOST_REQUIRE( s == "foobar" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
