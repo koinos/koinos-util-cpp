@@ -30,26 +30,43 @@ as_impl( Container& c, const T& t, std::size_t start )
    std::string s;
    t.SerializeToString( &s );
 
-   detail::maybe_resize( c, c.size() + s.size() );
+   detail::maybe_resize( c, std::size( c ) + std::size( s ) );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
-   return start + s.size();
+   return start + std::size( s );
+}
+
+template< typename T, class = std::void_t<> >
+struct is_container : std::false_type{};
+
+template< typename T >
+struct is_container< T, std::void_t< decltype( std::begin( std::declval< T >() ) ) > > : std::true_type{};
+
+template< class Container, typename T >
+typename std::enable_if_t< is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, std::size_t >
+as_impl( Container& c, const T& t, std::size_t start )
+{
+   detail::maybe_resize( c, std::size( c ) + std::size( t ) );
+
+   std::transform( std::begin( t ), std::end( t ), std::begin( c )+ start, []( auto ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
+
+   return start + std::size( t );
 }
 
 template< class Container, typename T >
-typename std::enable_if_t< !std::is_base_of_v< google::protobuf::Message, T >, std::size_t >
+typename std::enable_if_t< !is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, std::size_t >
 as_impl( Container& c, const T& t, std::size_t start )
 {
    std::stringstream ss;
    to_binary( ss, t );
    auto s = ss.str();
 
-   detail::maybe_resize( c, c.size() + s.size() );
+   detail::maybe_resize( c, std::size( c ) + std::size( s ) );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
-   return start + s.size();
+   return start + std::size( s );
 }
 
 template< typename T >
@@ -66,18 +83,6 @@ to_impl( std::stringstream& ss, T& t )
    from_binary( ss, t );
 }
 
-template< class Container >
-void as_n( Container& c, std::size_t start ) {}
-
-template< class Container, typename T, typename... Ts >
-void as_n( Container& c, std::size_t start, const T& t, Ts... ts )
-{
-   static_assert( !std::is_base_of_v< google::protobuf::Message, T > );
-
-   start += as_impl( c, t, start );
-   as_n( c, start, ts... );
-}
-
 // Is there a std or boost type that does this?
 template< int A, int B >
 struct greater_than
@@ -85,11 +90,25 @@ struct greater_than
    static constexpr bool value = A > B;
 };
 
-template< typename T >
-std::tuple< T > to_n( std::stringstream& ss )
+template< class Container, typename T >
+void as_n( Container& c, std::size_t start, const T& t )
+{
+   as_impl( c, t, start );
+}
+
+template< class Container, typename T, typename... Ts >
+std::enable_if_t< greater_than< sizeof...( Ts ), 0 >::value, void >
+as_n( Container& c, std::size_t start, const T& t, Ts... ts )
 {
    static_assert( !std::is_base_of_v< google::protobuf::Message, T > );
 
+   start += as_impl( c, t, start );
+   as_n( c, start, ts... );
+}
+
+template< typename T >
+std::tuple< T > to_n( std::stringstream& ss )
+{
    T t;
    to_impl( ss, t );
 

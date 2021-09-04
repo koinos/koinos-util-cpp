@@ -164,13 +164,30 @@ BOOST_AUTO_TEST_CASE( base58_test )
 BOOST_AUTO_TEST_CASE( conversion_test )
 {
    uint32_t x = 10;
-   uint64_t y = 20;
-   auto s = koinos::converter::as< std::string >( x, y );
+
+   auto s = koinos::converter::as< std::string >( x );
+   auto y = koinos::converter::to< uint32_t >( s );
+
+   BOOST_REQUIRE( x == y );
+
+   y = 20;
+   uint64_t z = 30;
+
+   s = koinos::converter::as< std::string >( x, z );
 
    auto [a, b] = koinos::converter::to< uint32_t, uint64_t >( s );
 
    BOOST_REQUIRE( x == a );
-   BOOST_REQUIRE( y == b );
+   BOOST_REQUIRE( z == b );
+
+   auto t = koinos::converter::as< std::string >( z );
+
+   s = koinos::converter::as< std::string >( x, t );
+
+   auto [c, d] = koinos::converter::to< uint64_t, uint32_t >( s );
+
+   BOOST_REQUIRE( c == uint64_t( x ) << 32 );
+   BOOST_REQUIRE( d == uint32_t( z ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
