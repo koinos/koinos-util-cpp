@@ -4,6 +4,8 @@
 
 #include <boost/mpl/greater.hpp>
 
+#include <koinos/binary.hpp>
+
 namespace google::protobuf {
    class Message;
 }
