@@ -41,17 +41,30 @@ template< typename T, class = std::void_t<> >
 struct is_container : std::false_type{};
 
 template< typename T >
-struct is_container< T, std::void_t< decltype( std::begin( std::declval< T >() ) ) > > : std::true_type{};
+struct is_container< T, std::void_t<
+   decltype(
+      std::begin( std::declval< T >() ),
+      std::end( std::declval< T >() ),
+      std::size( std::declval< T >() ) ) > > : std::true_type{};
 
 template< class Container, typename T >
 typename std::enable_if_t< is_container< T >::value && !std::is_base_of_v< google::protobuf::Message, T >, std::size_t >
 as_impl( Container& c, const T& t, std::size_t start )
 {
+   static_assert( sizeof( *std::begin( t ) ) == sizeof( std::byte ) );
+   // If c is a dynamic container, std::size( c ) == start
+   // If c is a static container (i.e. std::array, std::size( c ) != start )
    maybe_resize( c, std::size( c ) + std::size( t ) );
 
-   std::transform( std::begin( t ), std::end( t ), std::begin( c ) + start, []( auto ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
+   std::size_t items_to_add = std::size( t );
 
-   return start + std::size( t );
+   if ( std::size( c ) < start + std::size( t ) )
+      items_to_add = std::size( c ) - start;
+
+   // If c is a static container, we do not want to overflow, so only add up to the size of c
+   std::transform( std::begin( t ), std::end( t ) - ( std::size( t ) - items_to_add ), std::begin( c ) + start, []( auto ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
+
+   return start + items_to_add;
 }
 
 template< class Container, typename T >
