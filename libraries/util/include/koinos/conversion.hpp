@@ -15,10 +15,14 @@ namespace koinos::converter {
 namespace detail {
 
 template< typename T, std::size_t N >
-void maybe_resize( std::array< T, N >&, std::size_t ) {}
+void maybe_resize( std::array< T, N >& c, std::size_t s, std::size_t start = 0 )
+{
+   // This is inefficient for variadic as to array
+   std::memset( c.data() + start, 0, ( std::size( c ) - start ) );
+}
 
 template< class Container >
-void maybe_resize( Container& c, std::size_t s )
+void maybe_resize( Container& c, std::size_t s, std::size_t start = 0 )
 {
    c.resize( s );
 }
@@ -30,7 +34,7 @@ as_impl( Container& c, const T& t, std::size_t start )
    std::string s;
    t.SerializeToString( &s );
 
-   maybe_resize( c, std::size( c ) + std::size( s ) );
+   maybe_resize( c, std::size( c ) + std::size( s ), start );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
@@ -54,7 +58,7 @@ as_impl( Container& c, const T& t, std::size_t start )
    static_assert( sizeof( *std::begin( t ) ) == sizeof( std::byte ) );
    // If c is a dynamic container, std::size( c ) == start
    // If c is a static container (i.e. std::array, std::size( c ) != start )
-   maybe_resize( c, std::size( c ) + std::size( t ) );
+   maybe_resize( c, std::size( c ) + std::size( t ), start );
 
    std::size_t items_to_add = std::size( t );
 
@@ -75,7 +79,7 @@ as_impl( Container& c, const T& t, std::size_t start )
    to_binary( ss, t );
    auto s = ss.str();
 
-   maybe_resize( c, std::size( c ) + std::size( s ) );
+   maybe_resize( c, std::size( c ) + std::size( s ), start );
 
    std::transform( std::begin( s ), std::end( s ), std::begin( c ) + start, []( char ch ) { return reinterpret_cast< decltype( *std::begin( c ) ) >( ch ); } );
 
@@ -96,7 +100,7 @@ to_impl( std::stringstream& ss, T& t )
    auto pos = ss.tellg();
    auto s = ss.str();
 
-   maybe_resize( t, std::size( s ) - pos );
+   maybe_resize( t, std::size( s ) - pos, pos );
 
    std::transform( std::begin( s ) + pos, std::end( s ), std::begin( t ), []( auto ch ) { return reinterpret_cast< decltype( *std::begin( t ) ) >( ch ); } );
 }
