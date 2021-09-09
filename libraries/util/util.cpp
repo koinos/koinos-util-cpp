@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <iomanip>
+#include <sstream>
 
 namespace koinos {
 
@@ -31,6 +33,17 @@ std::string random_alphanumeric( std::size_t len )
    std::string str( len, 0 );
    std::generate_n( str.begin(), len, random_char );
    return str;
+}
+
+std::string to_hex( const std::string& s )
+{
+   std::stringstream stream;
+   stream << "0x" << std::hex << std::setfill( '0' );
+   for ( const auto& c : s )
+   {
+      stream << std::setw( 2 ) << static_cast< unsigned int >( static_cast< unsigned char >( c ) );
+   }
+   return stream.str();
 }
 
 } // koinos

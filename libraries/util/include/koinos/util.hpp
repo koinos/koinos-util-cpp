@@ -25,4 +25,6 @@ std::filesystem::path get_default_base_directory();
 
 std::string random_alphanumeric( std::size_t len );
 
+std::string to_hex( const std::string& s );
+
 } // koinos
