@@ -1,6 +1,11 @@
 #pragma once
 
+#include <cstddef>
+#include <cstring>
+#include <algorithm>
+#include <array>
 #include <sstream>
+#include <tuple>
 
 #include <boost/mpl/greater.hpp>
 
