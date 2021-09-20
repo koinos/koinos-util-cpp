@@ -207,4 +207,18 @@ BOOST_AUTO_TEST_CASE( conversion_test )
    BOOST_REQUIRE( s == "foobar" );
 }
 
+BOOST_AUTO_TEST_CASE( hex_test )
+{
+   const char bytes[] = {4, 8, 15, 16, 23, 42};
+   std::string byte_str( bytes, sizeof( bytes ) );
+
+   auto hex_str = koinos::to_hex( byte_str );
+
+   BOOST_CHECK( hex_str == "0x04080f10172a" );
+
+   auto new_byte_str = koinos::from_hex( hex_str );
+
+   BOOST_CHECK( byte_str == new_byte_str );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
