@@ -20,23 +20,15 @@ set(
    "Default cache server"
 )
 
-set(
-   HUNTER_PASSWORDS_PATH
-   "${CMAKE_CURRENT_LIST_DIR}/cmake/Hunter/passwords.cmake"
-   CACHE
-   FILEPATH
-   "Hunter passwords"
-)
-
 include("cmake/HunterGate.cmake")
 
 HunterGate(
-  URL "https://github.com/cpp-pm/hunter/archive/v0.23.287.tar.gz"
-  SHA1 "69371a638d697bbf09f4f08dd0aad996efcc79d9"
-  LOCAL
+   URL "https://github.com/cpp-pm/hunter/archive/v0.23.313.tar.gz"
+   SHA1 "6c369e5aab2749a616917df3b23511535f413604"
+   LOCAL
 )
 
-project(koinos_util VERSION 0.1.0 LANGUAGES CXX)
+project(koinos_util VERSION 0.1.0 LANGUAGES CXX C)
 
 #
 # CONFIGURATION
@@ -80,11 +72,20 @@ if(COVERAGE)
   setup_target_for_coverage_lcov(
      NAME coverage
      LCOV_ARGS "--quiet" "--no-external"
-     EXECUTABLE koinos_log_tests
-     EXCLUDE "libraries/vendor/*" "build/generated/*")
+     EXECUTABLE koinos_util_tests
+     EXCLUDE
+        "build/*"
+        "tests/*")
 endif()
 
+hunter_add_package(Boost COMPONENTS test)
+hunter_add_package(Protobuf)
+
+find_package(Boost CONFIG REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
+
 add_subdirectory(libraries)
+add_subdirectory(tests)
 
 # Install a pkg-config file, so other tools can find this.
 configure_file(

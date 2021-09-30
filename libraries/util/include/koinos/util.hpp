@@ -9,11 +9,12 @@
 namespace koinos {
 
 namespace service {
-   constexpr char chain[]          = "chain";
-   constexpr char block_store[]    = "block_store";
-   constexpr char mempool[]        = "mempool";
-   constexpr char block_producer[] = "block_producer";
-   constexpr char p2p[]            = "p2p";
+   constexpr char chain[]             = "chain";
+   constexpr char block_store[]       = "block_store";
+   constexpr char mempool[]           = "mempool";
+   constexpr char block_producer[]    = "block_producer";
+   constexpr char transaction_store[] = "transaction_store";
+   constexpr char p2p[]               = "p2p";
 }
 
 // Helper struct for using std::visit with std::variants
@@ -23,5 +24,8 @@ template< class... Ts > overloaded( Ts... ) -> overloaded< Ts... >;
 std::filesystem::path get_default_base_directory();
 
 std::string random_alphanumeric( std::size_t len );
+
+std::string to_hex( const std::string& s );
+std::string from_hex( const std::string& s );
 
 } // koinos
