@@ -75,7 +75,7 @@ if(COVERAGE)
      EXECUTABLE koinos_util_tests
      EXCLUDE
         "build/*"
-        "libraries/proto/generated/*")
+        "tests/*")
 endif()
 
 hunter_add_package(Boost COMPONENTS test)
