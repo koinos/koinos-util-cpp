@@ -1,6 +1,6 @@
-#include <koinos/base58.hpp>
+#include <koinos/util/base58.hpp>
 
-namespace koinos {
+namespace koinos::util {
 
 /** All alphanumeric characters except for "0", "I", "O", and "l" */
 static const char* pszBase58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -145,7 +145,7 @@ void encode_base58( std::string& s, const std::string& v )
 
 void decode_base58( const char* begin, size_t count, std::vector<char>& dest )
 {
-   KOINOS_TODO( "Avoid temp copy" );
+   #pragma message( "Avoid temp copy" )
    std::vector<char> temp( begin, begin+count );
    temp.push_back( '\0' );
    if ( !decode_base58( temp.data(), dest ) )
@@ -156,7 +156,7 @@ void decode_base58( const char* begin, size_t count, std::vector<char>& dest )
 
 void encode_base58( const char* begin, size_t count, std::vector<char>& dest )
 {
-   KOINOS_TODO( "Avoid temp copy" );
+   #pragma message( "Avoid temp copy" )
    std::string temp = encode_base58((const unsigned char*) begin, (const unsigned char*) begin+count);
    dest.resize(temp.size());
    std::copy(temp.begin(), temp.end(), dest.begin());

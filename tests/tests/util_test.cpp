@@ -7,9 +7,10 @@
 #include <vector>
 
 #include <koinos/tests/util_fixture.hpp>
-#include <koinos/base58.hpp>
+#include <koinos/util/base58.hpp>
+#include <koinos/util/conversion.hpp>
+#include <koinos/util/hex.hpp>
 #include <koinos/binary.hpp>
-#include <koinos/conversion.hpp>
 #include <koinos/varint.hpp>
 
 BOOST_FIXTURE_TEST_SUITE( util_tests, util_fixture )
@@ -55,7 +56,7 @@ BOOST_AUTO_TEST_CASE( base58_test )
    BOOST_TEST_MESSAGE( "base58 std::vector< char >" );
    {
       std::vector< char > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -64,13 +65,13 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::vector< unsigned char >" );
    {
       std::vector< unsigned char > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -79,13 +80,13 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::vector< std::byte >" );
    {
       std::vector< std::byte > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -94,13 +95,13 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< char, N >" );
    {
       std::array< char, array_size > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -109,13 +110,13 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< unsigned char, N >" );
    {
       std::array< unsigned char, array_size > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -124,13 +125,13 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< std::byte, N >" );
    {
       std::array< std::byte, array_size > bs;
-      koinos::decode_base58( b58_str, bs );
+      koinos::util::decode_base58( b58_str, bs );
 
       std::string result;
 
@@ -139,25 +140,25 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< char, N > overflow" );
    {
       std::array< char, array_size_overflow > bs;
-      BOOST_CHECK_THROW( koinos::decode_base58( b58_str, bs ), std::runtime_error );
+      BOOST_CHECK_THROW( koinos::util::decode_base58( b58_str, bs ), std::runtime_error );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< unsigned char, N > overflow" );
    {
       std::array< unsigned char, array_size_overflow > bs;
-      BOOST_CHECK_THROW( koinos::decode_base58( b58_str, bs ), std::runtime_error );
+      BOOST_CHECK_THROW( koinos::util::decode_base58( b58_str, bs ), std::runtime_error );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< std::byte, N > overflow" );
    {
       std::array< std::byte, array_size_overflow > bs;
-      BOOST_CHECK_THROW( koinos::decode_base58( b58_str, bs ), std::runtime_error );
+      BOOST_CHECK_THROW( koinos::util::decode_base58( b58_str, bs ), std::runtime_error );
    }
 }
 
@@ -165,44 +166,44 @@ BOOST_AUTO_TEST_CASE( conversion_test )
 {
    uint32_t x = 10;
 
-   auto s = koinos::converter::as< std::string >( x );
-   auto y = koinos::converter::to< uint32_t >( s );
+   auto s = koinos::util::converter::as< std::string >( x );
+   auto y = koinos::util::converter::to< uint32_t >( s );
 
    BOOST_REQUIRE( x == y );
 
    y = 20;
    uint64_t z = 30;
 
-   s = koinos::converter::as< std::string >( x, z );
+   s = koinos::util::converter::as< std::string >( x, z );
 
-   auto [a, b] = koinos::converter::to< uint32_t, uint64_t >( s );
+   auto [a, b] = koinos::util::converter::to< uint32_t, uint64_t >( s );
 
    BOOST_REQUIRE( x == a );
    BOOST_REQUIRE( z == b );
 
-   auto t = koinos::converter::as< std::string >( z );
+   auto t = koinos::util::converter::as< std::string >( z );
 
-   s = koinos::converter::as< std::string >( x, t );
+   s = koinos::util::converter::as< std::string >( x, t );
 
-   auto [c, d] = koinos::converter::to< uint64_t, uint32_t >( s );
+   auto [c, d] = koinos::util::converter::to< uint64_t, uint32_t >( s );
 
    BOOST_REQUIRE( c == uint64_t( x ) << 32 );
    BOOST_REQUIRE( d == uint32_t( z ) );
 
-   auto v = koinos::converter::as< std::vector< std::byte > >( s );
+   auto v = koinos::util::converter::as< std::vector< std::byte > >( s );
 
-   auto [e, u] = koinos::converter::to< uint32_t, std::string >( v );
+   auto [e, u] = koinos::util::converter::to< uint32_t, std::string >( v );
 
    BOOST_REQUIRE( e == x );
    BOOST_REQUIRE( t == u );
 
-   auto [f, g ] = koinos::converter::to< uint32_t, uint16_t >( std::string( "foobar" ) );
+   auto [f, g ] = koinos::util::converter::to< uint32_t, uint16_t >( std::string( "foobar" ) );
 
    BOOST_REQUIRE( f == 0x666f6f62 );
    BOOST_REQUIRE( g == 0x6172 );
 
-   auto w = koinos::converter::as< std::vector< std::byte > >( std::string( "foobar" ) );
-   s = koinos::converter::as< std::string >( w );
+   auto w = koinos::util::converter::as< std::vector< std::byte > >( std::string( "foobar" ) );
+   s = koinos::util::converter::as< std::string >( w );
 
    BOOST_REQUIRE( s == "foobar" );
 }
@@ -212,11 +213,11 @@ BOOST_AUTO_TEST_CASE( hex_test )
    const char bytes[] = {4, 8, 15, 16, 23, 42};
    std::string byte_str( bytes, sizeof( bytes ) );
 
-   auto hex_str = koinos::to_hex( byte_str );
+   auto hex_str = koinos::util::to_hex( byte_str );
 
    BOOST_CHECK( hex_str == "0x04080f10172a" );
 
-   auto new_byte_str = koinos::from_hex( hex_str );
+   auto new_byte_str = koinos::util::from_hex( hex_str );
 
    BOOST_CHECK( byte_str == new_byte_str );
 }

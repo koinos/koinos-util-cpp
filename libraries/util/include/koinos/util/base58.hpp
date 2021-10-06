@@ -9,14 +9,12 @@
 #include <string>
 #include <vector>
 
-#include <koinos/util.hpp>
-
 // Base58 algorithm is from Bitcoin's implementation
 // Copyright (c) 2014-2019 The Bitcoin Core developers
 // Distributed under the MIT software license
 // http://www.opensource.org/licenses/mit-license.php.
 
-namespace koinos {
+namespace koinos::util {
 
 namespace detail::base58 {
    constexpr std::size_t max_array_size = 1024 * 1024 * 10;
@@ -36,7 +34,7 @@ void decode_base58( const std::string& src, std::array< char, N >& dest )
 
    std::vector< char > v;
 
-   KOINOS_TODO( "This is inefficient. Consider ways to optimize base58 for an array" );
+   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 
@@ -50,7 +48,7 @@ void decode_base58( const std::string& src, std::array< unsigned char, N >& dest
 
    std::vector< char > v;
 
-   KOINOS_TODO( "This is inefficient. Consider ways to optimize base58 for an array" );
+   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 
@@ -64,7 +62,7 @@ void decode_base58( const std::string& src, std::array< std::byte, N >& dest )
 
    std::vector< char > v;
 
-   KOINOS_TODO( "This is inefficient. Consider ways to optimize base58 for an array" );
+   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 

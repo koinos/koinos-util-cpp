@@ -15,7 +15,7 @@ namespace google::protobuf {
    class Message;
 }
 
-namespace koinos::converter {
+namespace koinos::util::converter {
 
 namespace detail {
 
