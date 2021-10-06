@@ -1,5 +1,7 @@
 #include <koinos/util/random.hpp>
 
+#include <algorithm>
+
 namespace koinos::util {
 
 std::string random_alphanumeric( std::size_t len )
