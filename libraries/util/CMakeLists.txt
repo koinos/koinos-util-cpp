@@ -1,10 +1,12 @@
-file(GLOB HEADERS "include/koinos/*.hpp")
+file(GLOB HEADERS "include/koinos/*.hpp" "include/koinos/util/*.hpp")
 
 add_library(koinos_util
    base58.cpp
    bigint.cpp
-   util.cpp
    varint.cpp
+   random.cpp
+   services.cpp
+   hex.cpp
    ${HEADERS})
 
 target_link_libraries(koinos_util PUBLIC Boost::headers)
