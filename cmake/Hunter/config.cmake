@@ -12,3 +12,10 @@ hunter_config(Protobuf
       CMAKE_CXX_FLAGS=-fvisibility=hidden
       CMAKE_C_FLAGS=-fvisibility=hidden
 )
+
+hunter_config(yaml-cpp
+   VERSION "0.6.3"
+   CMAKE_ARGS
+      CMAKE_CXX_FLAGS=-fvisibility=hidden
+      CMAKE_C_FLAGS=-fvisibility=hidden
+)

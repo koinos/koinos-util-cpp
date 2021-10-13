@@ -9,7 +9,7 @@ add_library(koinos_util
    hex.cpp
    ${HEADERS})
 
-target_link_libraries(koinos_util PUBLIC Boost::headers)
+target_link_libraries(koinos_util PUBLIC Boost::headers yaml-cpp)
 
 target_include_directories(koinos_util PUBLIC
    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
