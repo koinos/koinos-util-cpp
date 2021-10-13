@@ -10,8 +10,11 @@
 #include <koinos/util/base58.hpp>
 #include <koinos/util/conversion.hpp>
 #include <koinos/util/hex.hpp>
+#include <koinos/util/options.hpp>
 #include <koinos/binary.hpp>
 #include <koinos/varint.hpp>
+
+#include <boost/program_options.hpp>
 
 BOOST_FIXTURE_TEST_SUITE( util_tests, util_fixture )
 
@@ -220,6 +223,35 @@ BOOST_AUTO_TEST_CASE( hex_test )
    auto new_byte_str = koinos::util::from_hex( hex_str );
 
    BOOST_CHECK( byte_str == new_byte_str );
+}
+
+BOOST_AUTO_TEST_CASE( options_test )
+{
+   boost::program_options::variables_map cli_args;
+   YAML::Node service_config;
+   YAML::Node global_config;
+
+   uint32_t default_value = 0;
+
+   auto i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   BOOST_CHECK( i == default_value );
+
+   global_config[ "foo" ] = 1;
+   i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   BOOST_CHECK( i == global_config[ "foo" ].as< uint32_t >() );
+
+   service_config[ "foo" ] = 2;
+   i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   BOOST_CHECK( i == service_config[ "foo" ].as< uint32_t >() );
+
+   char* args[] = {"test", "--foo", "2"};
+   boost::program_options::options_description options;
+   options.add_options()
+      ("foo", boost::program_options::value< uint32_t >(), "test option" );
+
+   boost::program_options::store( boost::program_options::parse_command_line( 3, args, options ), cli_args );
+   i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   BOOST_CHECK( i == cli_args[ "foo" ].as< uint32_t >() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

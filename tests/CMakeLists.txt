@@ -54,7 +54,7 @@ add_boost_test(koinos_util_tests
    TESTS ${TEST_CASES}
 )
 
-target_link_libraries(koinos_util_tests Koinos::util ${PLATFORM_SPECIFIC_LIBS})
+target_link_libraries(koinos_util_tests Koinos::util Boost::program_options yaml-cpp ${PLATFORM_SPECIFIC_LIBS})
 target_include_directories(koinos_util_tests PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>  # <prefix>/include
