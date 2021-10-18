@@ -18,7 +18,9 @@ target_include_directories(koinos_util PUBLIC
 
 add_library(Koinos::util ALIAS koinos_util)
 
-install(FILES ${HEADERS} DESTINATION "include/koinos")
+install(
+   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+   DESTINATION "include/" )
 
 export(
    TARGETS ${KOINOS_LIB_TARGET_NAME}
