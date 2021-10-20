@@ -56,10 +56,18 @@ BOOST_AUTO_TEST_CASE( base58_test )
    std::string str     = "The quick brown fox jumps over the lazy dog";
    std::string b58_str = "7DdiPPYtxLjCD3wA1po2rvZHTDYjkZYiEtazrfiwJcwnKCizhGFhBGHeRdx";
 
+   BOOST_TEST_MESSAGE( "base58 string" );
+   {
+      auto bs = koinos::util::from_base58< std::string >( b58_str );
+
+      BOOST_CHECK_EQUAL( bs, str );
+
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( bs ) );
+   }
+
    BOOST_TEST_MESSAGE( "base58 std::vector< char >" );
    {
-      std::vector< char > bs;
-      koinos::util::decode_base58( b58_str, bs );
+      auto bs = koinos::util::from_base58< std::vector< char > >( b58_str );
 
       std::string result;
 
@@ -68,13 +76,12 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::vector< unsigned char >" );
    {
-      std::vector< unsigned char > bs;
-      koinos::util::decode_base58( b58_str, bs );
+      auto bs = koinos::util::from_base58< std::vector< unsigned char > >( b58_str );
 
       std::string result;
 
@@ -83,13 +90,12 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::vector< std::byte >" );
    {
-      std::vector< std::byte > bs;
-      koinos::util::decode_base58( b58_str, bs );
+      auto bs = koinos::util::from_base58< std::vector< std::byte > >( b58_str );
 
       std::string result;
 
@@ -98,7 +104,7 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( result, str );
 
-      BOOST_CHECK_EQUAL( b58_str, koinos::util::encode_base58( bs ) );
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( bs ) );
    }
 
    BOOST_TEST_MESSAGE( "base58 std::array< char, N >" );
@@ -163,6 +169,16 @@ BOOST_AUTO_TEST_CASE( base58_test )
       std::array< std::byte, array_size_overflow > bs;
       BOOST_CHECK_THROW( koinos::util::decode_base58( b58_str, bs ), std::runtime_error );
    }
+
+   BOOST_TEST_MESSAGE( "base58 generic type" );
+   {
+      auto b58_str = "1131SRtpx1";
+      auto t = koinos::util::from_base58< uint64_t >( b58_str );
+
+      BOOST_CHECK_EQUAL( t, 0x04080f10172aull );
+
+      BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( t ) );
+   }
 }
 
 BOOST_AUTO_TEST_CASE( conversion_test )
@@ -220,9 +236,17 @@ BOOST_AUTO_TEST_CASE( hex_test )
 
    BOOST_CHECK( hex_str == "0x04080f10172a" );
 
-   auto new_byte_str = koinos::util::from_hex( hex_str );
+   auto new_byte_str = koinos::util::from_hex< std::string >( hex_str );
 
    BOOST_CHECK( byte_str == new_byte_str );
+
+   uint64_t x = 0x04080f10172a;
+   hex_str = koinos::util::to_hex( x );
+
+   BOOST_CHECK( hex_str == "0x000004080f10172a" );
+   uint64_t y = koinos::util::from_hex< uint64_t >( hex_str );
+
+   BOOST_CHECK( x == y );
 }
 
 BOOST_AUTO_TEST_CASE( options_test )
