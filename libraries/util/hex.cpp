@@ -5,7 +5,8 @@
 
 namespace koinos::util {
 
-std::string to_hex( const std::string& s )
+template<>
+std::string to_hex< std::string >( const std::string& s )
 {
    std::stringstream stream;
    stream << "0x" << std::hex << std::setfill( '0' );
@@ -27,7 +28,8 @@ char hex_to_char( char in )
    throw std::logic_error( "input is not hex" );
 }
 
-std::string from_hex( const std::string& s )
+template<>
+std::string from_hex< std::string >( const std::string& s )
 {
    std::string bytes;
    bytes.reserve( s.size() / 2 );

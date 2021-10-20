@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include <koinos/util/conversion.hpp>
+
 // Base58 algorithm is from Bitcoin's implementation
 // Copyright (c) 2014-2019 The Bitcoin Core developers
 // Distributed under the MIT software license
@@ -93,6 +95,45 @@ std::string encode_base58( const std::array< std::byte, N >& v )
 {
    const unsigned char* begin = reinterpret_cast< const unsigned char* >( v.data() );
    return encode_base58( begin, begin + N );
+}
+
+template< typename T >
+std::string to_base58( const T& );
+template< typename T >
+T from_base58( const std::string& );
+
+template<>
+std::string to_base58< std::string >( const std::string& );
+template<>
+std::string from_base58< std::string >( const std::string& );
+
+template<>
+std::string to_base58< std::vector< char > >( const std::vector< char >& );
+template<>
+std::vector< char > from_base58< std::vector< char > >( const std::string& );
+
+template<>
+std::string to_base58< std::vector< unsigned char > >( const std::vector< unsigned char >& );
+template<>
+std::vector< unsigned char > from_base58< std::vector< unsigned char > >( const std::string& );
+
+template<>
+std::string to_base58< std::vector< std::byte > >( const std::vector< std::byte >& );
+template<>
+std::vector< std::byte > from_base58< std::vector< std::byte > >( const std::string& );
+
+template< typename T >
+std::string to_base58( const T& t )
+{
+   return encode_base58( converter::as< std::vector< std::byte > >( t ) );
+}
+
+template< typename T >
+T from_base58( const std::string& s )
+{
+   std::vector< std::byte > v;
+   decode_base58( s, v );
+   return converter::to< T >( v );
 }
 
 } // koinos

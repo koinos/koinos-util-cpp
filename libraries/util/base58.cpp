@@ -180,4 +180,64 @@ std::string encode_base58( const std::vector< std::byte >& v )
    return encode_base58( begin, begin + v.size() );
 }
 
+template<>
+std::string to_base58< std::string >( const std::string& s )
+{
+   return encode_base58( reinterpret_cast< const unsigned char* >( s.c_str() ), reinterpret_cast< const unsigned char* >( s.c_str() + s.size() ) );
+}
+
+template<>
+std::string from_base58< std::string >( const std::string& s )
+{
+   std::vector< char > v;
+   if ( !decode_base58( s.c_str(), v ) )
+   {
+      throw std::runtime_error( "base58 decoding unsuccessful" );
+   }
+
+   return converter::as< std::string >( v );
+}
+
+template<>
+std::string to_base58< std::vector< char > >( const std::vector< char >& v )
+{
+   return encode_base58( v );
+}
+
+template<>
+std::vector< char > from_base58< std::vector< char > >( const std::string& s )
+{
+   std::vector< char > v;
+   decode_base58( s, v );
+   return v;
+}
+
+template<>
+std::string to_base58< std::vector< unsigned char > >( const std::vector< unsigned char >& v )
+{
+   return encode_base58( v );
+}
+
+template<>
+std::vector< unsigned char > from_base58< std::vector< unsigned char > >( const std::string& s )
+{
+   std::vector< unsigned char > v;
+   decode_base58( s, v );
+   return v;
+}
+
+template<>
+std::string to_base58< std::vector< std::byte > >( const std::vector< std::byte >& v )
+{
+   return encode_base58( v );
+}
+
+template<>
+std::vector< std::byte > from_base58< std::vector< std::byte > >( const std::string& s )
+{
+   std::vector< std::byte > v;
+   decode_base58( s, v );
+   return v;
+}
+
 } // koinos
