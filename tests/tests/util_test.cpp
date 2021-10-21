@@ -265,21 +265,21 @@ BOOST_AUTO_TEST_CASE( options_test )
    uint32_t default_value = 0;
 
    auto i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
-   auto flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
+   auto flag = koinos::util::get_flag( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == default_value );
    BOOST_CHECK( !flag );
 
    global_config[ "foo" ] = 1;
    global_config[ "bar" ] = true;
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
-   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
+   flag = koinos::util::get_flag( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == global_config[ "foo" ].as< uint32_t >() );
    BOOST_CHECK( flag );
 
    service_config[ "foo" ] = 2;
    service_config[ "bar" ] = false;
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
-   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
+   flag = koinos::util::get_flag( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == service_config[ "foo" ].as< uint32_t >() );
    BOOST_CHECK( !flag );
 
@@ -287,7 +287,7 @@ BOOST_AUTO_TEST_CASE( options_test )
 
    boost::program_options::store( boost::program_options::parse_command_line( 4, args2, options ), cli_args );
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
-   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
+   flag = koinos::util::get_flag( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == cli_args[ "foo" ].as< uint32_t >() );
    BOOST_CHECK( flag );
 }
