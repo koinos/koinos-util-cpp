@@ -231,27 +231,41 @@ BOOST_AUTO_TEST_CASE( options_test )
    YAML::Node service_config;
    YAML::Node global_config;
 
+   char* args[] = {"test"};
+   boost::program_options::options_description options;
+   options.add_options()
+      ("foo", boost::program_options::value< uint32_t >(), "test option" )
+      ("bar", boost::program_options::bool_switch()->default_value(false), "test flag");
+   boost::program_options::store( boost::program_options::parse_command_line( 1, args, options ), cli_args );
+
    uint32_t default_value = 0;
 
    auto i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   auto flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == default_value );
+   BOOST_CHECK( !flag );
 
    global_config[ "foo" ] = 1;
+   global_config[ "bar" ] = true;
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == global_config[ "foo" ].as< uint32_t >() );
+   BOOST_CHECK( flag );
 
    service_config[ "foo" ] = 2;
+   service_config[ "bar" ] = false;
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == service_config[ "foo" ].as< uint32_t >() );
+   BOOST_CHECK( !flag );
 
-   char* args[] = {"test", "--foo", "2"};
-   boost::program_options::options_description options;
-   options.add_options()
-      ("foo", boost::program_options::value< uint32_t >(), "test option" );
+   char* args2[] = {"test", "--foo", "2", "--bar"};
 
-   boost::program_options::store( boost::program_options::parse_command_line( 3, args, options ), cli_args );
+   boost::program_options::store( boost::program_options::parse_command_line( 4, args2, options ), cli_args );
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
+   flag = koinos::util::get_option( "bar", false, cli_args, service_config, global_config );
    BOOST_CHECK( i == cli_args[ "foo" ].as< uint32_t >() );
+   BOOST_CHECK( flag );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

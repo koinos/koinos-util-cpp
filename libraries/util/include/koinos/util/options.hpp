@@ -14,7 +14,7 @@ T get_option(
    const YAML::Node& service_config = YAML::Node(),
    const YAML::Node& global_config = YAML::Node() )
 {
-   if ( cli_args.count( key ) )
+   if ( cli_args.count( key ) && cli_args[ key ].as< T >() != default_value )
       return cli_args[ key ].as< T >();
 
    if ( service_config && service_config[ key ] )
