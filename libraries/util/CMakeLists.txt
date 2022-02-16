@@ -7,7 +7,6 @@ add_library(koinos_util
    random.cpp
    services.cpp
    hex.cpp
-   options.cpp
    ${HEADERS})
 
 target_link_libraries(koinos_util PUBLIC Boost::headers yaml-cpp)

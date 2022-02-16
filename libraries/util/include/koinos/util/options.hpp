@@ -26,11 +26,4 @@ T get_option(
    return std::move( default_value );
 }
 
-bool get_flag(
-   std::string key,
-   bool default_value,
-   const boost::program_options::variables_map& cli_args,
-   const YAML::Node& service_config = YAML::Node(),
-   const YAML::Node& global_config = YAML::Node() );
-
 } // koinos::util
