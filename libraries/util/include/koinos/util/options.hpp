@@ -7,7 +7,7 @@
 namespace koinos::util {
 
 template< typename T >
-std::vector< T > get_option(
+std::vector< T > get_options(
    std::string key,
    std::vector< T > default_value,
    const boost::program_options::variables_map& cli_args,
