@@ -23,7 +23,7 @@ std::vector< T > get_options(
    {
       const auto& config = service_config[ key ];
       std::transform( values.end(), config.begin(), config.end(),
-         []( auto it ) -> T { return it.as< T >(); } );
+         []( auto& it ) -> T { return it.template as< T >(); } );
       return values;
    }
 
@@ -31,7 +31,7 @@ std::vector< T > get_options(
    {
       const auto& config = global_config[ key ];
       std::transform( values.end(), config.begin(), config.end(),
-         []( auto it ) -> T { return it.as< T >(); } );
+         []( auto& it ) -> T { return it.tempalte as< T >(); } );
       return values;
    }
 }
