@@ -22,16 +22,14 @@ std::vector< T > get_options(
 
    if ( service_config && service_config[ key ] )
    {
-      const auto& config = service_config[ key ];
-      std::transform( config.begin(), config.end(), values.end(),
-         []( auto& it ) -> T { return it.template as< T >(); } );
+      for ( auto& n : service_config[ key ] )
+         values.emplace_back( n.template as< T >() );
    }
 
    if ( global_config && global_config[ key ] )
    {
-      const auto& config = global_config[ key ];
-      std::transform( config.begin(), config.end(), values.end(),
-         []( auto& it ) -> T { return it.template as< T >(); } );
+      for ( auto& n : global_config[ key ] )
+         values.emplace_back( n.template as< T >() );
    }
 
    return std::move( values );
