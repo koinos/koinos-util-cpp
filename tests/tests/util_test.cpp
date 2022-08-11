@@ -8,6 +8,7 @@
 
 #include <koinos/tests/util_fixture.hpp>
 #include <koinos/util/base58.hpp>
+#include <koinos/util/base64.hpp>
 #include <koinos/util/conversion.hpp>
 #include <koinos/util/hex.hpp>
 #include <koinos/util/options.hpp>
@@ -179,6 +180,119 @@ BOOST_AUTO_TEST_CASE( base58_test )
 
       BOOST_CHECK_EQUAL( b58_str, koinos::util::to_base58( t ) );
    }
+}
+
+BOOST_AUTO_TEST_CASE( base64_test )
+{
+   // Test cases from https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-64-with-cpp/test
+
+   BOOST_TEST_MESSAGE( "Basic Test" );
+
+   const std::string orig =
+      "René Nyffenegger\n"
+      "http://www.renenyffenegger.ch\n"
+      "passion for data\n";
+
+   auto encoded = koinos::util::to_base64( orig );
+   auto decoded = koinos::util::from_base64< std::string >( encoded );
+
+   BOOST_CHECK_EQUAL( encoded, "UmVuw6kgTnlmZmVuZWdnZXIKaHR0cDovL3d3dy5yZW5lbnlmZmVuZWdnZXIuY2gKcGFzc2lvbiBmb3IgZGF0YQo=" );
+   BOOST_CHECK_EQUAL( decoded, orig );
+
+   BOOST_TEST_MESSAGE( "Test all possibilities of fill bytes (none, one =, two ==)" );
+
+   std::string original = "abc";
+   std::string reference = "YWJj";
+
+   encoded = koinos::util::to_base64( original );
+   decoded = koinos::util::from_base64< std::string >( encoded );
+
+   BOOST_CHECK_EQUAL( encoded, reference );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   original = "abcd";
+   reference = "YWJjZA==";
+
+   encoded = koinos::util::to_base64( original );
+   decoded = koinos::util::from_base64< std::string >( encoded );
+
+   BOOST_CHECK_EQUAL( encoded, reference );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   original = "abcde";
+   reference = "YWJjZGU=";
+
+   encoded = koinos::util::to_base64( original );
+   decoded = koinos::util::from_base64< std::string >( encoded );
+
+   BOOST_CHECK_EQUAL( encoded, reference );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   BOOST_TEST_MESSAGE( "URL based tests" );
+
+   original = "aaaaaaaaaaaaaaaaa";
+   std::string expected = "YWFhYWFhYWFhYWFhYWFhYWE=";
+   std::string expected_url = "YWFhYWFhYWFhYWFhYWFhYWE=";
+
+   encoded = koinos::util::to_base64( original, false );
+   auto encoded_url = koinos::util::to_base64( original );
+
+   BOOST_CHECK_EQUAL( encoded, expected );
+   BOOST_CHECK_EQUAL( encoded_url, expected_url );
+
+   decoded = koinos::util::from_base64< std::string >( encoded );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   decoded = koinos::util::from_base64< std::string >( encoded_url );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   original = "\x03" "\xef" "\xff" "\xf9";
+   expected = "A+//+Q==";
+   expected_url = "A-__-Q==";
+
+   encoded = koinos::util::to_base64( original, false );
+   encoded_url = koinos::util::to_base64( original );
+
+   BOOST_CHECK_EQUAL( encoded, expected );
+   BOOST_CHECK_EQUAL( encoded_url, expected_url );
+
+   decoded = koinos::util::from_base64< std::string >( encoded );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   decoded = koinos::util::from_base64< std::string >( encoded_url );
+   BOOST_CHECK_EQUAL( decoded, original );
+
+   BOOST_TEST_MESSAGE( "Test decoding without padding" );
+
+   std::string input = "YWJjZGVmZw"; // Note the missing ==
+   expected = "abcdefg";
+
+   decoded = koinos::util::from_base64< std::string >( input );
+   BOOST_CHECK_EQUAL( decoded, expected );
+
+   input = "YWJjZGU"; // Note the missing =
+   expected = "abcde";
+
+   decoded = koinos::util::from_base64< std::string >( input );
+   BOOST_CHECK_EQUAL( decoded, expected );
+
+   input = "";
+   expected = "";
+
+   decoded = koinos::util::from_base64< std::string >( input );
+   BOOST_CHECK_EQUAL( decoded, expected );
+
+   input = "YQ";
+   expected = "a";
+
+   decoded = koinos::util::from_base64< std::string >( input );
+   BOOST_CHECK_EQUAL( decoded, expected );
+
+   input = "YWI";
+   expected = "ab";
+
+   decoded = koinos::util::from_base64< std::string >( input );
+   BOOST_CHECK_EQUAL( decoded, expected );
 }
 
 BOOST_AUTO_TEST_CASE( conversion_test )
