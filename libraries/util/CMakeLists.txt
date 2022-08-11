@@ -2,6 +2,7 @@ file(GLOB HEADERS "include/koinos/*.hpp" "include/koinos/util/*.hpp")
 
 add_library(koinos_util
    base58.cpp
+   base64.cpp
    bigint.cpp
    varint.cpp
    random.cpp
