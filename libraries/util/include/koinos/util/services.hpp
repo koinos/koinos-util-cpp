@@ -12,6 +12,7 @@ namespace service {
    constexpr char transaction_store[]   = "transaction_store";
    constexpr char p2p[]                 = "p2p";
    constexpr char contract_meta_store[] = "contract_meta_store";
+   constexpr char account_history[]     = "account_history";
 }
 
 std::filesystem::path get_default_base_directory();
