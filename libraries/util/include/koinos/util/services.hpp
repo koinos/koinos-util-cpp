@@ -13,6 +13,8 @@ namespace service {
    constexpr char p2p[]                 = "p2p";
    constexpr char contract_meta_store[] = "contract_meta_store";
    constexpr char account_history[]     = "account_history";
+   constexpr char grpc[]                = "grpc";
+   constexpr char jsonrpc[]             = "jsonrpc";
 }
 
 std::filesystem::path get_default_base_directory();
