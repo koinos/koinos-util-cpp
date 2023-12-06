@@ -29,13 +29,13 @@ before_install:
   - eval "${MATRIX_EVAL}"
 
 install:
-  - ci/install.sh
+  - tools/ci/install.sh
 
 script:
-  - ci/build.sh && ci/test.sh
+  - tools/ci/build.sh && tools/ci/test.sh
 
 after_success:
-  - ci/after_success.sh
+  - tools/ci/after_success.sh
 
 notifications:
   slack:

@@ -6,7 +6,6 @@
 #include <sstream>
 #include <vector>
 
-#include <koinos/tests/util_fixture.hpp>
 #include <koinos/util/base58.hpp>
 #include <koinos/util/base64.hpp>
 #include <koinos/util/conversion.hpp>
@@ -16,6 +15,8 @@
 #include <koinos/varint.hpp>
 
 #include <boost/program_options.hpp>
+
+struct util_fixture{};
 
 BOOST_FIXTURE_TEST_SUITE( util_tests, util_fixture )
 
@@ -369,7 +370,7 @@ BOOST_AUTO_TEST_CASE( options_test )
    YAML::Node service_config;
    YAML::Node global_config;
 
-   char* args[] = {"test"};
+   const char* args[] = {"test"};
    boost::program_options::options_description options;
    options.add_options()
       ("foo", boost::program_options::value< uint32_t >(), "test option" )
@@ -391,7 +392,7 @@ BOOST_AUTO_TEST_CASE( options_test )
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
    BOOST_CHECK( i == service_config[ "foo" ].as< uint32_t >() );
 
-   char* args2[] = {"test", "--foo", "2", "--bar"};
+   const char* args2[] = {"test", "--foo", "2", "--bar"};
 
    boost::program_options::store( boost::program_options::parse_command_line( 4, args2, options ), cli_args );
    i = koinos::util::get_option( "foo", default_value, cli_args, service_config, global_config );
