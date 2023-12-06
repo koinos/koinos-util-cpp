@@ -2,9 +2,15 @@
 cmake_minimum_required(VERSION 3.19.0)
 
 cmake_policy(SET CMP0074 NEW)
-cmake_policy(SET CMP0135 NEW)
 cmake_policy(SET CMP0114 NEW)
-cmake_policy(SET CMP0144 NEW)
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.24.0)
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.24.0)
+  cmake_policy(SET CMP0144 NEW)
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
