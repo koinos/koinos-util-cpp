@@ -24,8 +24,7 @@ add_library(util
 target_link_libraries(
   util
     PUBLIC
-      Boost::headers
-      yaml-cpp)
+      Boost::headers)
 
 target_include_directories(
   util
