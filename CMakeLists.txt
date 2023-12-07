@@ -43,4 +43,4 @@ koinos_add_package(yaml-cpp CONFIG REQUIRED)
 add_subdirectory(src)
 add_subdirectory(tests)
 
-koinos_install(TARGETS log)
+koinos_install(TARGETS util)

@@ -38,23 +38,8 @@ koinos_add_format_target(util)
 add_library(Koinos::util ALIAS util)
 
 install(
-  FILES
-    ${PROJECT_SOURCE_DIR}/include/koinos/bigint.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/binary.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/varint.hpp
+  DIRECTORY
+    ${PROJECT_SOURCE_DIR}/include
   DESTINATION
-    include/koinos)
-
-install(
-  FILES
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/base58.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/base64.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/conversion.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/hex.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/options.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/overloaded.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/random.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/services.hpp
-    ${PROJECT_SOURCE_DIR}/include/koinos/util/time.hpp
-  DESTINATION
-    include/koinos/util)
+    include/
+)
