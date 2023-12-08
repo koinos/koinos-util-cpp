@@ -20,9 +20,9 @@ koinos_add_format(
     util_tests
 )
 
-koinos_coverage(
-  EXECUTABLE
-    util_tests
-  EXCLUDE
-    "tests/*"
-)
+#koinos_coverage(
+#  EXECUTABLE
+#    util_tests
+#  EXCLUDE
+#    "tests/*"
+#)
