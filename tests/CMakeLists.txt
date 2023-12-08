@@ -5,8 +5,6 @@ enable_testing()
 koinos_coverage(
   EXECUTABLE
     util_tests
-  BASE_DIRECTORY
-    "${PROJECT_SOURCE_DIR}"
   EXCLUDE
     "tests/*"
 )
@@ -20,6 +18,7 @@ koinos_add_test(util_tests
 
 target_link_libraries(util_tests Koinos::util Boost::program_options yaml-cpp)
 target_include_directories(util_tests PUBLIC
+  ${CMAKE_CURRENT_SOURC_DIR}/src
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
