@@ -29,12 +29,12 @@ project(koinos_util
 
 koinos_define_version()
 
-#koinos_coverage(
-#  EXECUTABLE
-#    util_tests
-#  EXCLUDE
-#    "tests/*"
-#)
+koinos_coverage(
+  EXECUTABLE
+    util_tests
+  EXCLUDE
+    "tests/*"
+)
 
 koinos_add_package(Boost CONFIG REQUIRED
   ADD_COMPONENTS program_options test

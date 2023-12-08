@@ -2,12 +2,12 @@ include(CTest)
 
 enable_testing()
 
-koinos_coverage(
-  EXECUTABLE
-    util_tests
-  EXCLUDE
-    "tests/*"
-)
+#koinos_coverage(
+#  EXECUTABLE
+#    util_tests
+#  EXCLUDE
+#    "tests/*"
+#)
 
 koinos_add_test(util_tests
   SOURCES
