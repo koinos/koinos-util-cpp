@@ -9,7 +9,7 @@ koinos_add_test(koinos_util_tests
     util_test.cpp
 )
 
-koinos_add_format_target(util)
+koinos_add_format_target(koinos_util_tests)
 
 target_link_libraries(koinos_util_tests Koinos::util Boost::program_options yaml-cpp)
 target_include_directories(koinos_util_tests PUBLIC
