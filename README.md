@@ -35,17 +35,17 @@ cmake -D STATIC_ANALYSIS=ON ..
 
 ### Testing
 
-Tests are built by default as target `koinos_util_tests`. You can building them specifically with:
+Tests are built by default as target `util_tests`. You can building them specifically with:
 
 ```
-cmake --build . --config Release --parallel --target koinos_util_tests
+cmake --build . --config Release --parallel --target util_tests
 ```
 
 Tests can be invoked from the tests directiory within the build directory.
 
 ```
 cd tests
-./koinos_util_tests
+./util_tests
 ```
 
 Tests can also be ran in parallel using CTest.

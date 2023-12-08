@@ -15,7 +15,7 @@ AlignConsecutiveBitFields:
   PadOperators: true
 AlignConsecutiveDeclarations:
   Enabled: false
-AlignConsecutiveMacros: Consecutive
+#AlignConsecutiveMacros: Consecutive
 AlignConsecutiveMacros:
   Enabled: true
   AcrossEmptyLines: false
