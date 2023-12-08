@@ -5,8 +5,10 @@ enable_testing()
 koinos_coverage(
   EXECUTABLE
     util_tests
-#  EXCLUDE
-#    "tests/*"
+  BASE_DIRECTORY
+    "${PROJECT_SOURCE_DIR}"
+  EXCLUDE
+    "tests/*"
 )
 
 koinos_add_test(util_tests
