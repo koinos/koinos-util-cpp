@@ -8,6 +8,7 @@ addons:
     update: true
     packages:
     - clang
+    - clang-format
     - llvm
     - lcov
     - ruby
