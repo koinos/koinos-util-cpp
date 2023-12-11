@@ -145,7 +145,6 @@ void encode_base58( std::string& s, const std::string& v )
 
 void decode_base58( const char* begin, size_t count, std::vector<char>& dest )
 {
-   #pragma message( "Avoid temp copy" )
    std::vector<char> temp( begin, begin+count );
    temp.push_back( '\0' );
    if ( !decode_base58( temp.data(), dest ) )
@@ -156,7 +155,6 @@ void decode_base58( const char* begin, size_t count, std::vector<char>& dest )
 
 void encode_base58( const char* begin, size_t count, std::vector<char>& dest )
 {
-   #pragma message( "Avoid temp copy" )
    std::string temp = encode_base58((const unsigned char*) begin, (const unsigned char*) begin+count);
    dest.resize(temp.size());
    std::copy(temp.begin(), temp.end(), dest.begin());
