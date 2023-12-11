@@ -305,7 +305,6 @@ BOOST_AUTO_TEST_CASE( conversion_test )
 
    BOOST_REQUIRE( x == y );
 
-   y = 20;
    uint64_t z = 30;
 
    s = koinos::util::converter::as< std::string >( x, z );
