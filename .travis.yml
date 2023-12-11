@@ -6,6 +6,11 @@ cache:
 addons:
   apt:
     update: true
+    packages:
+    - clang
+    - llvm
+    - lcov
+    - ruby
 
 jobs:
   include:
