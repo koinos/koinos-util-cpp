@@ -36,7 +36,7 @@ void decode_base58( const std::string& src, std::array< char, N >& dest )
 
    std::vector< char > v;
 
-   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
+   //#pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 
@@ -50,7 +50,7 @@ void decode_base58( const std::string& src, std::array< unsigned char, N >& dest
 
    std::vector< char > v;
 
-   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
+   //#pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 
@@ -64,7 +64,7 @@ void decode_base58( const std::string& src, std::array< std::byte, N >& dest )
 
    std::vector< char > v;
 
-   #pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
+   //#pragma message( "This is inefficient. Consider ways to optimize base58 for an array" )
    if( !decode_base58( src.c_str(), v, N ) || v.size() != N )
       throw std::runtime_error( "failed during base58 decode" );
 
