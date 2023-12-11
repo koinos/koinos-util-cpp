@@ -13,22 +13,12 @@ using int256_t  = boost::multiprecision::int256_t;
 using uint256_t = boost::multiprecision::uint256_t;
 
 using int160_t = boost::multiprecision::number<
-   boost::multiprecision::cpp_int_backend<
-      160,
-      160,
-      boost::multiprecision::signed_magnitude,
-      boost::multiprecision::unchecked, void
-   >
->;
+  boost::multiprecision::
+    cpp_int_backend< 160, 160, boost::multiprecision::signed_magnitude, boost::multiprecision::unchecked, void > >;
 
 using uint160_t = boost::multiprecision::number<
-   boost::multiprecision::cpp_int_backend<
-      160,
-      160,
-      boost::multiprecision::unsigned_magnitude,
-      boost::multiprecision::unchecked, void
-   >
->;
+  boost::multiprecision::
+    cpp_int_backend< 160, 160, boost::multiprecision::unsigned_magnitude, boost::multiprecision::unchecked, void > >;
 
 template<>
 void to_binary< int128_t >( std::ostream& s, const int128_t& v );
@@ -66,4 +56,4 @@ void to_binary< uint256_t >( std::ostream& s, const uint256_t& v );
 template<>
 void from_binary< uint256_t >( std::istream& s, uint256_t& v );
 
-} // koinos
+} // namespace koinos
