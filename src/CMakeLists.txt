@@ -1,11 +1,16 @@
 add_library(util
-  base58.cpp
   base64.cpp
-  bigint.cpp
-  varint.cpp
-  random.cpp
-  services.cpp
-  hex.cpp
+
+  koinos/bigint.cpp
+  koinos/varint.cpp
+
+  koinos/util/base58.cpp
+  koinos/util/base64.cpp
+  koinos/util/hex.cpp
+  koinos/util/random.cpp
+  koinos/util/services.cpp
+
+  base64.h
 
   ${PROJECT_SOURCE_DIR}/include/koinos/bigint.hpp
   ${PROJECT_SOURCE_DIR}/include/koinos/binary.hpp
@@ -31,6 +36,8 @@ target_include_directories(
     PUBLIC
       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:include>
+    PRIVATE
+      ${PROJECT_SOURCE_DIR}/src
 )
 
 koinos_add_format(
