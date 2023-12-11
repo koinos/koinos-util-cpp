@@ -112,8 +112,8 @@ static std::string encode(String s, bool url) {
 std::string base64_encode(unsigned char const* bytes_to_encode, size_t in_len, bool url) {
 
     size_t len_encoded = (in_len +2) / 3 * 4;
-
-    unsigned char trailing_char = url ? '.' : '=';
+    unsigned char trailing_char = '=';
+    //unsigned char trailing_char = url ? '.' : '=';
 
  //
  // Choose set of base64 characters. They differ
