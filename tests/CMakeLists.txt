@@ -1,6 +1,8 @@
-include(CTest)
+if (NOT BUILD_TESTING)
+  return()
+endif()
 
-enable_testing()
+include(CTest)
 
 koinos_add_test(util_tests
   SOURCES

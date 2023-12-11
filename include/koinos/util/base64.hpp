@@ -21,13 +21,13 @@ std::string from_base64< std::string >( const std::string& s );
 template< typename T >
 std::string to_base64( const T& t, bool websafe )
 {
-   return to_base64( converter::as< std::string >( t ), websafe );
+  return to_base64( converter::as< std::string >( t ), websafe );
 }
 
 template< typename T >
 T from_base64( const std::string& s )
 {
-   return converter::to< T >( from_base64< std::string >( s ) );
+  return converter::to< T >( from_base64< std::string >( s ) );
 }
 
-} // koinos::util
+} // namespace koinos::util

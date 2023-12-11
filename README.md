@@ -30,7 +30,7 @@ cmake --build . --config Release --parallel
 You can optionally run static analysis with Clang-Tidy during the build process. Static analysis is checked in CI and is required to pass before merging pull requests.
 
 ```
-cmake -D STATIC_ANALYSIS=ON ..
+cmake -D CMAKE_BUILD_TYPE=Debug -D STATIC_ANALYSIS=ON ..
 ```
 
 ### Testing
