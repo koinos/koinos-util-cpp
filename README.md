@@ -20,7 +20,7 @@ This project's structure follows the [Pitchfork](https://api.csswg.org/bikeshed/
 
 Koinos Util's build process is configured using CMake. Additionally, all dependencies are managed through Hunter, a CMake drive package manager for C/C++. This means that all dependencies are downloaded and built during configuration rather than relying on system installed libraries.
 
-```
+```console
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=Release ..
@@ -29,35 +29,35 @@ cmake --build . --config Release --parallel
 
 You can optionally run static analysis with Clang-Tidy during the build process. Static analysis is checked in CI and is required to pass before merging pull requests.
 
-```
-cmake -D STATIC_ANALYSIS=ON ..
+```console
+cmake -D CMAKE_BUILD_TYPE=Debug -D STATIC_ANALYSIS=ON ..
 ```
 
 ### Testing
 
 Tests are built by default as target `util_tests`. You can building them specifically with:
 
-```
+```console
 cmake --build . --config Release --parallel --target util_tests
 ```
 
 Tests can be invoked from the tests directiory within the build directory.
 
-```
+```console
 cd tests
 ./util_tests
 ```
 
 Tests can also be ran in parallel using CTest.
 
-```
+```console
 cd tests
 ctest -j
 ```
 
 You can also generate a coverage report.
 
-```
+```console
 cmake -D CMAKE_BUILD_TYPE=Debug -D COVERAGE=ON ..
 cmake --build . --config Debug --parallel 3 --target coverage
 ```
