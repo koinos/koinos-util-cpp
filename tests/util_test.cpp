@@ -374,11 +374,14 @@ BOOST_AUTO_TEST_CASE( options_test )
   YAML::Node global_config;
 
   const char* args[] = { "test" };
+
+  // clang-format off
   boost::program_options::options_description options;
-  options.add_options()( "foo", boost::program_options::value< uint32_t >(), "test option" )(
-    "bar",
-    boost::program_options::bool_switch()->default_value( false ),
-    "test flag" );
+  options.add_options()
+    ( "foo", boost::program_options::value< uint32_t >(), "test option" )
+    ( "bar", boost::program_options::bool_switch()->default_value( false ), "test flag" );
+  // clang-format on
+
   boost::program_options::store( boost::program_options::parse_command_line( 1, args, options ), cli_args );
 
   uint32_t default_value = 0;
