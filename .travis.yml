@@ -17,6 +17,11 @@ jobs:
     - os: linux
       dist: jammy
       env:
+        - RUN_TYPE=static-analysis
+        - MATRIX_EVAL="CC=clang && CXX=clang++"
+    - os: linux
+      dist: jammy
+      env:
         - RUN_TYPE=coverage
         - MATRIX_EVAL="CC=clang && CXX=clang++"
     - os: linux
