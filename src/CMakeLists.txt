@@ -30,6 +30,7 @@ target_link_libraries(
   util
     PUBLIC
       Boost::headers
+    INTERFACE
       Boost::program_options
       yaml-cpp)
 
