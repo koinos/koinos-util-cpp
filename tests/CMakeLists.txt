@@ -18,9 +18,8 @@ target_link_libraries(
 
 target_include_directories(
   util_tests
-    PUBLIC
-      $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/tests>
-      $<INSTALL_INTERFACE:include>)
+    PRIVATE
+      $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/tests>)
 
 koinos_add_format(TARGET util_tests)
 
