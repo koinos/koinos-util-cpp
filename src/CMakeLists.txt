@@ -29,7 +29,9 @@ add_library(util
 target_link_libraries(
   util
     PUBLIC
-      Boost::headers)
+      Boost::headers
+      Boost::program_options
+      yaml-cpp)
 
 target_include_directories(
   util
@@ -37,13 +39,9 @@ target_include_directories(
       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:include>
     PRIVATE
-      ${PROJECT_SOURCE_DIR}/src
-)
+      ${PROJECT_SOURCE_DIR}/src)
 
-koinos_add_format(
-  TARGET
-    util
-)
+koinos_add_format(TARGET util)
 
 add_library(Koinos::util ALIAS util)
 
@@ -53,5 +51,4 @@ install(
   DIRECTORY
     ${PROJECT_SOURCE_DIR}/include
   DESTINATION
-    ${CMAKE_INSTALL_PREFIX}
-)
+    ${CMAKE_INSTALL_PREFIX})

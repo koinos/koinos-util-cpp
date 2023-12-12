@@ -24,7 +24,7 @@ include("${koinos_cmake_SOURCE_DIR}/Koinos.cmake")
 
 project(koinos_util
   VERSION 1.0.1
-  DESCRIPTION "The Koinos util library"
+  DESCRIPTION "The Koinos utility library"
   LANGUAGES CXX C)
 
 koinos_define_version()
