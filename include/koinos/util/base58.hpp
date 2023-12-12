@@ -19,7 +19,7 @@
 namespace koinos::util {
 
 namespace detail::base58 {
-constexpr std::size_t max_array_size = 1024 * 1024 * 10;
+constexpr std::size_t max_array_size = 1'024 * 1'024 * 10;
 } // namespace detail::base58
 
 bool decode_base58( const char* psz,

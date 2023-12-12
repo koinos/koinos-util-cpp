@@ -37,7 +37,7 @@ bool decode_base58( const char* psz, std::vector< char >& dest, std::size_t max_
     psz++;
   }
   // Allocate enough space in big-endian base256 representation.
-  int size = strlen( psz ) * 733 / 1000 + 1; // log(58) / log(256), rounded up.
+  int size = strlen( psz ) * 733 / 1'000 + 1; // log(58) / log(256), rounded up.
   std::vector< unsigned char > b256( size );
   // Process the characters.
   static_assert( sizeof( mapBase58 ) / sizeof( mapBase58[ 0 ] ) == 256,

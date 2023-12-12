@@ -15,17 +15,15 @@ AlignConsecutiveBitFields:
   PadOperators: true
 AlignConsecutiveDeclarations:
   Enabled: false
-#AlignConsecutiveMacros: Consecutive
 AlignConsecutiveMacros:
   Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
 AlignEscapedNewlines: Right
 AlignOperands: true
-# clang-16
-#AlignTrailingComments:
-#  Kind: Always
-#  OverEmptyLines: 0
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
 AllowAllArgumentsOnNextLine: False
 AllowAllParametersOfDeclarationOnNextLine: False
 # clang-18
@@ -65,14 +63,11 @@ BraceWrapping:
   SplitEmptyNamespace: False
 # clang-17
 #BracedInitializerIndentWidth: 2
-# clang-16
-#BreakAfterAttributes: Always
-# clang-16
-#BreakArrays: False
+BreakAfterAttributes: Always
+BreakArrays: False
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeConceptDeclarations: Always
-# clang-16
-#BreakBeforeInlineASMColon: OnlyMultiline
+BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: True
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterComma
@@ -93,13 +88,11 @@ IndentPPDirectives: AfterHash
 IndentWidth: 2
 IndentWrappedFunctionNames: False
 InsertBraces: False
-# clang-16
-#InsertNewLineAtEOF: True
-# clang-16
-#IntegerLiteralSeparator:
-#  Binary: 0
-#  Decimal: 3
-#  Hex: 0
+InsertNewlineAtEOF: True
+IntegerLiteralSeparator:
+  Binary: 0
+  Decimal: 3
+  Hex: 0
 KeepEmptyLinesAtTheStartOfBlocks: False
 LambdaBodyIndentation: Signature
 Language: Cpp
@@ -113,16 +106,13 @@ ReflowComments: True
 RemoveBracesLLVM: False
 # clang-17
 #RemoveParentheses: False
-# clang-16
-#RemoveSemicolon: False
+RemoveSemicolon: False
 RequiresClausePosition: OwnLine
-# clang-16
-#RequiresExpressionIndentation: OuterScope
+RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 0
 SortIncludes: CaseInsensitive
-# clang-16
-#SortUsingDeclarations: LexicographicNumeric
+SortUsingDeclarations: LexicographicNumeric
 SpaceAfterCStyleCast: False
 SpaceAfterLogicalNot: False
 SpaceAfterTemplateKeyword: False
