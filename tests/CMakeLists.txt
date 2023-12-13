@@ -14,7 +14,7 @@ koinos_add_test(
 target_link_libraries(
   util_tests
     PRIVATE
-      Koinos::util)
+      util)
 
 target_include_directories(
   util_tests
