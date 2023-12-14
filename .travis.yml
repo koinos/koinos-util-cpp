@@ -12,6 +12,7 @@ addons:
     - llvm
     - llvm-dev
     - llvm-runtime
+    - llvm-16-linker-tools
     - lcov
     - ruby
 
