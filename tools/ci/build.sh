@@ -4,7 +4,7 @@ set -e
 set -x
 
 mkdir build
-cd build
+pushd build
 
 if [ "$RUN_TYPE" = "test" ]; then
    cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -16,4 +16,22 @@ elif [ "$RUN_TYPE" = "coverage" ]; then
 elif [ "$RUN_TYPE" = "static-analysis" ]; then
    cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_ANALYSIS=ON ..
    cmake --build . --config Debug --parallel 3
+elif [ "$RUN_TYPE" = "sanitizer" ]; then
+   popd
+   mkdir build-address
+   pushd build-address
+   cmake -DCMAKE_BUILD_TYPE=Release -DSANITIZER=Address ..
+   cmake --build . --config Release --parallel 3
+
+   popd
+   mkdir build-stack
+   pushd build-stack
+   cmake -DCMAKE_BUILD_TYPE=Release -DSANITIZER=Stack ..
+   cmake --build . --config Release --parallel 3
+
+   popd
+   mkdir build-thread
+   pushd build-thread
+   cmake -DCMAKE_BUILD_TYPE=Release -DSANITIZER=Thread ..
+   cmake --build . --config Release --parallel 3
 fi

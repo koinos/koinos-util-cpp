@@ -9,5 +9,16 @@ if [ "$RUN_TYPE" = "test" ]; then
 
    cd $TRAVIS_BUILD_DIR/build/tests
    exec ctest -j3 --output-on-failure
+else if [ "$RUN_TYPE" = "sanitizer" ]; then
+   pushd $TRAVIS_BUILD_DIR/build-address/tests
+   exec ctest -j1 --output-on-failure
+
+   popd
+   pushd $TRAVIS_BUILD_DIR/build-stack/tests
+   exec ctest -j1 --output-on-failure
+
+   popd
+   pushd $TRAVIS_BUILD_DIR/build-thread/tests
+   exec ctest -j1 --output-on-failure
 fi
 
