@@ -9,10 +9,10 @@ addons:
     packages:
     - clang
     - clang-format
+    - clang-tools
     - llvm
     - llvm-dev
     - llvm-runtime
-    - llvm-linker-tools
     - lcov
     - ruby
 
