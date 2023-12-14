@@ -11,6 +11,7 @@ addons:
     - clang-format
     - llvm
     - llvm-dev
+    - llvm-runtime
     - lcov
     - ruby
 
