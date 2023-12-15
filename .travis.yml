@@ -10,7 +10,6 @@ addons:
     - clang
     - clang-format
     - llvm
-    - llvm-15-linker-tools
     - lcov
     - ruby
 
