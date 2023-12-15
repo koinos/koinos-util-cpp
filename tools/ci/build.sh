@@ -18,7 +18,7 @@ elif [ "$RUN_TYPE" = "static-analysis" ]; then
    cmake --build . --config Debug --parallel 3
 elif [ "$RUN_TYPE" = "sanitizer" ]; then
    which ld.gold
-   find / -name LLVMgold.so
+   sudo find / -name LLVMgold.so
 
    popd
    mkdir build-address
