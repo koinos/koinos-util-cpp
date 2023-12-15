@@ -17,6 +17,8 @@ elif [ "$RUN_TYPE" = "static-analysis" ]; then
    cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_ANALYSIS=ON ..
    cmake --build . --config Debug --parallel 3
 elif [ "$RUN_TYPE" = "sanitizer" ]; then
+   which ld.gold
+
    popd
    mkdir build-address
    pushd build-address
