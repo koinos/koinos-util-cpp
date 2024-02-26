@@ -62,6 +62,15 @@ cmake -D CMAKE_BUILD_TYPE=Debug -D COVERAGE=ON ..
 cmake --build . --config Debug --parallel 3 --target coverage
 ```
 
+You can run tests in different sanitizer profiles. Those profiles are None (Default), Address, Stack, and Thread. Currently, these are only known to work with clang, but may work with gcc with additional environment configuration.
+
+```
+cmake -D CMAKE_BUILT_TYPE=Release -D SANITIZER=Address ..
+cmake --build . --config Release --parallel --target util_tests
+cd tests
+ctest -j
+```
+
 ### Formatting
 
 Formatting of the source code is enforced by ClangFormat. If ClangFormat is installed, build targets will be automatically generated. You can review the library's code style by uploading the included `.clang-format` to https://clang-format-configurator.site/.
