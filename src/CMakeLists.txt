@@ -44,8 +44,6 @@ target_include_directories(
 
 koinos_add_format(TARGET util)
 
-add_library(Koinos::util ALIAS util)
-
 koinos_install(TARGETS util)
 
 install(
