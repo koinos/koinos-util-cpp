@@ -7,7 +7,7 @@ This library contains various utility functions for the Koinos Blockchain Framew
 This project's structure follows the [Pitchfork](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs) specification.
 
 ```
-├── build/   # An ephemeral directory for building the project. Not checked in, but excluded via `.gitignore`.
+├── build/   # An ephemeral directory for building the project. Not checked in, but excluded via .gitignore.
 ├── include/ # Contains all public headers for the Koinos Util.
 ├── src/     # Contains all source code and private headers for Koinos Util.
 └── tests/   # Contains tests for Koinos Util.
