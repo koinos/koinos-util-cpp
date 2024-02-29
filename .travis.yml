@@ -30,7 +30,6 @@ jobs:
         - CC=clang
         - CXX=clang++
       before_script:
-        - echo $CC
         - cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_ANALYSIS=ON .
       script:
         - cmake --build . --config Debug --parallel 3
