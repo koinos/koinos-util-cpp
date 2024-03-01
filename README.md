@@ -6,15 +6,12 @@ This library contains various utility functions for the Koinos Blockchain Framew
 
 This project's structure follows the [Pitchfork](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs) specification.
 
-**`build`**: An ephemeral directory for building the project. Not checked in, but excluded via `.gitignore`.
-
-**`include`**: Contains all public headers for the Koinos Util.
-
-**`src`**: Contains all source code and private headers for Koinos Util.
-
-**`tests`**: Contains tests for Koinos Util.
-
-**`tools`**: Contains additional tooling for Koinos Util, primarily CI scripts.
+```
+├── build/   # An ephemeral directory for building the project. Not checked in, but excluded via .gitignore.
+├── include/ # Contains all public headers for the Koinos Util.
+├── src/     # Contains all source code and private headers for Koinos Util.
+└── tests/   # Contains tests for Koinos Util.
+```
 
 ### Building
 
@@ -65,7 +62,7 @@ cmake --build . --config Debug --parallel 3 --target coverage
 You can run tests in different sanitizer profiles. Those profiles are None (Default), Address, Stack, and Thread. Currently, these are only known to work with clang, but may work with gcc with additional environment configuration.
 
 ```
-cmake -D CMAKE_BUILT_TYPE=Release -D SANITIZER=Address ..
+cmake -D CMAKE_BUILD_TYPE=Release -D SANITIZER=Address ..
 cmake --build . --config Release --parallel --target util_tests
 cd tests
 ctest -j
