@@ -6,38 +6,111 @@ cache:
 addons:
   apt:
     update: true
+    packages:
+      - clang
+      - clang-format
+      - llvm
+      - llvm-dev
+      - lcov
+      - ruby
+      - gcc-12
+      - g++-12
+
+env:
+  global:
+    - CMAKE_C_COMPILER_LAUNCHER=ccache
+    - CMAKE_CXX_COMPILER_LAUNCHER=ccache
 
 jobs:
   include:
-    - os: linux
+    - name: "Static Analysis"
+      os: linux
       dist: jammy
       env:
-        - RUN_TYPE=coverage
-        - MATRIX_EVAL="CC=clang-11 && CXX=clang++-11"
-    - os: linux
+        - CC=clang
+        - CXX=clang++
+      before_script:
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_ANALYSIS=ON .
+      script:
+        - cmake --build . --config Debug --parallel 3
+
+    - name: "Sanitizer"
+      os: linux
       dist: jammy
       env:
-        - RUN_TYPE=test
-        - MATRIX_EVAL="CC=gcc && CXX=g++"
-    - os: linux
+        - CC=clang
+        - CXX=clang++
+      before_script:
+        - mkdir build-address
+        - pushd build-address
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=Address ..
+        - cmake --build . --config Debug --parallel 3
+        - popd
+        - mkdir build-stack
+        - pushd build-stack
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=Stack ..
+        - cmake --build . --config Debug --parallel 3
+        - popd
+        - mkdir build-thread
+        - pushd build-thread
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=Thread ..
+        - cmake --build . --config Debug --parallel 3
+        - popd
+      script:
+        - pushd build-address/tests
+        - ctest -j1 --output-on-failure
+        - popd
+        - pushd build-stack/tests
+        - ctest -j1 --output-on-failure
+        - popd
+        - pushd build-thread/tests
+        - ctest -j1 --output-on-failure
+
+    - name: "Coverage"
+      os: linux
       dist: jammy
       env:
-        - RUN_TYPE=test
-        - MATRIX_EVAL="CC=clang-11 && CXX=clang++-11"
+        - CC=clang
+        - CXX=clang++
+      install:
+        - sudo gem install coveralls-lcov
+      before_script:
+        - mkdir build
+        - cd build
+        - cmake -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON ..
+      script:
+        - cmake --build . --config Debug --parallel 3 --target coverage
+      after_success:
+        - coveralls-lcov --repo-token $COVERALLS_REPO_TOKEN --service-name travis-pro --service-job-id $TRAVIS_JOB_ID ./coverage.info
 
-before_install:
-  - eval "${MATRIX_EVAL}"
+    - name: "GCC Unit Tests"
+      os: linux
+      dist: jammy
+      env:
+        - CC=gcc-12
+        - CXX=g++-12
+      before_script:
+        - cmake -DCMAKE_BUILD_TYPE=Release .
+        - cmake --build . --config Release --parallel 3
+      script:
+        - cd tests
+        - ctest -j3 --output-on-failure
 
-install:
-  - ci/install.sh
-
-script:
-  - ci/build.sh && ci/test.sh
-
-after_success:
-  - ci/after_success.sh
+    - name: "Clang Unit Tests and Formatting"
+      os: linux
+      dist: jammy
+      env:
+        - CC=clang
+        - CXX=clang++
+      before_script:
+        - cmake -DCMAKE_BUILD_TYPE=Release .
+        - cmake --build . --config Release --parallel 3
+      script:
+        - cmake --build . --config Release --parallel 3 --target format.check
+        - cd tests
+        - ctest -j3 --output-on-failure
 
 notifications:
   slack:
-    secure: Fx5AGddmmeZqZBUbRdI2/zLaiWy7H+afXEWLYSEnu8+bf6sHCOTPvDsHbgPRZikAdSCa0GaxDzqVeFcOFYgX0+XPQgpY4Q2mBwrNViajxArvJXghA/4DfAAUx7knr22RbZjUsEnp2wEGU6Rp9UHo3Y+IOwXR/2v6BnQ1ntMzS1Np1X4HegHXxArrfmbx6JU+43CXajNJGcx9Bhdwnp6puCRQ+gGUz4+tSwy/0UTX4APTGKVqxuhOqRlpVkbCh1g4l6wDJ5gBP0AXM3d2BTmQYdgL6/BwqJG4REjSp6GSaoEOa22cnPtbmXnWY7/npb6uVRVo/WFvJJt6SPGOb7QJn03j/bEK1HCCIdJZR7MwxpAt7vAkihBkkb65izrKXAF05Y5dgZvJsRUCQNr3aDarPPJzU0hLV2g1o1QinuJayUtbXv3/YiP1aqM/zKe4v+J17El6X+2z+Pwvs53brOMpTIfPL/+vCNHreTKHYD90SfU44R/ObwhqS0F+pmbLwarcnwoA0ADBuorGg2HMBEU+GrTxTQiNj0p2SO+2FTFsp4AJ4LhEDsjlrvAQ2TFH3oDIpoR+IN1Pcoi4oJQ7WvFonNVj0Ndw5uJDzPMqMPy3DKNNGtUWaGy+kTHN12kWaid7HTqUDS6hye9Lq4msGwQXdmRyNjB6BENdX2Pt8L0LtEU=
+    secure: REBAEdJ7lZUhaGaFndvBSYYetgKVWWIBwBnw8puMkr365YpFK9N3YN8vibbu2VK+cIbXfDj0YZfmHpNkDfAgoScHDZbWpk4YFtoAUCrWyRRZ8GhxUWW80bt3fLEwNpC7rCjNk6hcLSmAMz1KLPVzmvS0gRy6etLTqhfC2pW7+ouqU3iHtCHydVL/LiUjBdAR7fSY+x2bF1J/+oRSIm4qLBCkx1H02feqdZPgfs40ikcI19/bFdxTd0TeaFwTRWMPDRGBE35wl8+PJX7PIKZyU9V972q+5SccuZAVB8V/1WuL24UGSsjDJ7xUl8FjLGNtQyudSb4BzMh1NqNvL/1dWQzYNhOTcHSEjub4s5DtoILlGhwQlopnw0k4hXSNqpzrTkvY7nI39MmikxMml3CCRGEFrx6SC6SvQ/xrcF1FARpG9c2xJllnv8gDaWhEeFmxRB6p3UBnHVur7/1NY9fflM9MTFXdkKKrt6bn3xspvGkaXDwkd/CdY/ki77uTlLv9ox8mbkbfX5Y4kuZf1bl1c91veYcR+MrmvItXMQGdBHhXaZMW/rUS23gZJdD0ZPiAyVq5ftEDklsmtnQqY6JG9pe6c7dA2AgC7JW7Ewl/kwJQo6zAWawvSCHN816JkjR6PdKpX33s7aS1N2zHn+1l8gtH9NN6UEGh5c9Jl1Sy02E=
     on_success: never
