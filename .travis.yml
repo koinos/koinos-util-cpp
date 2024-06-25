@@ -41,6 +41,7 @@ jobs:
         - CC=clang
         - CXX=clang++
       before_script:
+        - sudo sysctl vm.mmap_rnd_bits=28 # https://stackoverflow.com/questions/77850769/fatal-threadsanitizer-unexpected-memory-mapping-when-running-on-linux-kernels
         - mkdir build-address
         - pushd build-address
         - cmake -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=Address ..
